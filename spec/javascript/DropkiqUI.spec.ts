@@ -79,12 +79,32 @@ const testSchema = {
 	}
 }
 
+const context = {
+  "event": {
+    type: "ColumnTypes::HasOne",
+    foreign_table_name: "events"
+  }
+}
+
 describe('DropkiqUI#constructor', () => {
   it('can be initialized', () => {
-	console.log(document);
-	// let autoComplete = new DropkiqUI("value", 0, testSchema, {}, {});
-    // expect(autoComplete.rawTextBody).toBe("value");
-    // expect(autoComplete.caretRow).toBe(0);
-    // expect(autoComplete.caretColumn).toBe(0);
+	  let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+
+    expect(dropkiqUI['element']).toStrictEqual(element)
+    expect(dropkiqUI['schema']).toStrictEqual(testSchema)
+    expect(dropkiqUI['context']).toStrictEqual(context)
+    expect(dropkiqUI['scope']).toStrictEqual({})
+    expect(dropkiqUI['licenseKey']).toStrictEqual(licenseKey)
+
+    expect(dropkiqUI['suggestionsArray']).toStrictEqual([]);
+    expect(dropkiqUI['result']).toStrictEqual({});
+    expect(dropkiqUI['caretOffset']).toStrictEqual({});
+    expect(dropkiqUI['pathSchema']).toStrictEqual([]);
+    expect(dropkiqUI['menuMode']).toStrictEqual(false);
+
+    let dropkiqDiv = document.getElementById('dropkiq-autosuggest-menu');
+    expect(dropkiqDiv.innerHTML.length).not.toBe(0);
   })
 })
