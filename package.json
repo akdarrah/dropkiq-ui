@@ -1,11 +1,17 @@
 {
   "name": "dropkiq-ui",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Liquid Expressions Simplified",
   "main": "dist/index.js",
   "author": "Adam Darrah <adam@dropkiq.com>",
   "private": false,
-  "keywords": ["liquid", "liquidjs", "dropkiq", "dropkiq-ui", "shopify"],
+  "keywords": [
+    "liquid",
+    "liquidjs",
+    "dropkiq",
+    "dropkiq-ui",
+    "shopify"
+  ],
   "files": [
     "dist/**/*"
   ],
