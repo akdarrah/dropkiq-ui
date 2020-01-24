@@ -18,7 +18,7 @@
     ]
   },
   "dependencies": {
-    "dropkiq": "^1.0.22",
+    "dropkiq": "^1.0.24",
     "tslib": "^1.6.1"
   },
   "devDependencies": {

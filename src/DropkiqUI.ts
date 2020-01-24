@@ -1,4 +1,4 @@
-const DropkiqEngine = require('dropkiq')
+const { AutoComplete } = require('dropkiq')
 import { BoundElement } from './BoundElement'
 
 export class DropkiqUI {
@@ -29,7 +29,7 @@ export class DropkiqUI {
     this.scope = scope;
     this.licenseKey = licenseKey;
 
-    this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey);
+    this.dropkiqEngine = new AutoComplete("", 0, schema, context, scope, this.licenseKey);
     this.suggestionsArray = [];
     this.result = {};
     this.caretOffset = {};

@@ -1811,10 +1811,10 @@ domexception@^1.0.1:
   dependencies:
     webidl-conversions "^4.0.2"
 
-dropkiq@^1.0.22:
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/dropkiq/-/dropkiq-1.0.22.tgz#fcf504a08a5a4b01e24a33452072b8ccc65a37fb"
-  integrity sha512-Y66558/pZX4HOnCCx1oeNufewuzRD9AVNK5kEBw9DdeyPr5SMMlW5aJ83Xb/hJiGZ8tmdDO1rrZAPYZlHVLH/A==
+dropkiq@^1.0.24:
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/dropkiq/-/dropkiq-1.0.24.tgz#09e51e9bdd4f291694c9866b312f474dc6694078"
+  integrity sha512-ay90iCNbCXgyaV/kdW3lRyE/qUL3YUHu+EtG3t7TgzFxyFUHv4RwDyTX4UIBpxxWqpo4ajVGCk3WiW9yXQRdzQ==
   dependencies:
     axios "^0.18.1"
     js-yaml "^3.0.0"
