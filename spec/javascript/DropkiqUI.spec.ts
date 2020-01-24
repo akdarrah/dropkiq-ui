@@ -180,3 +180,20 @@ describe('DropkiqUI#scrollToPrevious', () => {
     expect(dropkiqUI['suggestionsArray'][1]['active']).toBe(true)
   })
 })
+
+describe('DropkiqUI#closeMenu', () => {
+  it('clears the list of suggestions to close the menu', () => {
+    let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    dropkiqUI['renderSuggestions'] = function(){};
+
+    dropkiqUI['suggestionsArray'] = [
+      {name: "Test One", active: false},
+      {name: "Test Two", active: true}
+    ]
+
+    dropkiqUI['closeMenu']();
+    expect(dropkiqUI['suggestionsArray']).toStrictEqual([])
+  })
+})
