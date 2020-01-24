@@ -108,3 +108,75 @@ describe('DropkiqUI#constructor', () => {
     expect(dropkiqDiv.innerHTML.length).not.toBe(0);
   })
 })
+
+describe('DropkiqUI#scrollToNext', () => {
+  it('can go to the next suggestion', () => {
+    let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    dropkiqUI['renderSuggestions'] = function(){};
+
+    dropkiqUI['suggestionsArray'] = [
+      {name: "Test One", active: true},
+      {name: "Test Two"}
+    ]
+
+    dropkiqUI['scrollToNext']();
+
+    expect(dropkiqUI['suggestionsArray'][0]['active']).toBe(false)
+    expect(dropkiqUI['suggestionsArray'][1]['active']).toBe(true)
+  })
+
+  it('wraps back to the first suggestion', () => {
+    let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    dropkiqUI['renderSuggestions'] = function(){};
+
+    dropkiqUI['suggestionsArray'] = [
+      {name: "Test One", active: false},
+      {name: "Test Two", active: true}
+    ]
+
+    dropkiqUI['scrollToNext']();
+
+    expect(dropkiqUI['suggestionsArray'][0]['active']).toBe(true)
+    expect(dropkiqUI['suggestionsArray'][1]['active']).toBe(false)
+  })
+})
+
+describe('DropkiqUI#scrollToPrevious', () => {
+  it('can go to the previous suggestion', () => {
+    let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    dropkiqUI['renderSuggestions'] = function(){};
+
+    dropkiqUI['suggestionsArray'] = [
+      {name: "Test One", active: false},
+      {name: "Test Two", active: true}
+    ]
+
+    dropkiqUI['scrollToPrevious']();
+
+    expect(dropkiqUI['suggestionsArray'][0]['active']).toBe(true)
+    expect(dropkiqUI['suggestionsArray'][1]['active']).toBe(false)
+  })
+
+  it('can wrap to the last suggestion', () => {
+    let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    dropkiqUI['renderSuggestions'] = function(){};
+
+    dropkiqUI['suggestionsArray'] = [
+      {name: "Test One", active: true},
+      {name: "Test Two", active: false}
+    ]
+
+    dropkiqUI['scrollToPrevious']();
+
+    expect(dropkiqUI['suggestionsArray'][0]['active']).toBe(false)
+    expect(dropkiqUI['suggestionsArray'][1]['active']).toBe(true)
+  })
+})
