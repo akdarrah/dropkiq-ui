@@ -197,3 +197,49 @@ describe('DropkiqUI#closeMenu', () => {
     expect(dropkiqUI['suggestionsArray']).toStrictEqual([])
   })
 })
+
+describe('DropkiqUI#suggestionTitleText', () => {
+  it('constructs title text with only the name', () => {
+    let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+
+    let suggestion = {name: "Test"}
+    let titleText  = dropkiqUI['suggestionTitleText'](suggestion);
+
+    expect(titleText).toStrictEqual("Test")
+  })
+
+  it('constructs title text with a preview', () => {
+    let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+
+    let suggestion = {name: "Test", preview: "Preview"}
+    let titleText  = dropkiqUI['suggestionTitleText'](suggestion);
+
+    expect(titleText).toStrictEqual("Test **OUTPUT** Preview")
+  })
+
+  it('constructs title text with a hint', () => {
+    let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+
+    let suggestion = {name: "Test", hint: "Hint"}
+    let titleText  = dropkiqUI['suggestionTitleText'](suggestion);
+
+    expect(titleText).toStrictEqual("Test **HINT** Hint")
+  })
+
+  it('constructs title text with a preview and hint', () => {
+    let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+
+    let suggestion = {name: "Test", preview: "Preview", hint: "Hint"}
+    let titleText  = dropkiqUI['suggestionTitleText'](suggestion);
+
+    expect(titleText).toStrictEqual("Test **OUTPUT** Preview **HINT** Hint")
+  })
+})
