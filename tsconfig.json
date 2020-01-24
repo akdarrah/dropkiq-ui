@@ -17,13 +17,7 @@
     "strictNullChecks": false
   },
   "exclude": [
-    "src/liquidjs/test",
-    "src/liquidjs/benchmark",
-    "src/liquidjs/bin",
-    "src/liquidjs/demo",
-    "src/liquidjs/docs",
-    "src/liquidjs/*.ts",
-    "src/liquidjs/*.js",
+    "spec",
     "**/*.spec.ts",
     "node_modules",
     "vendor",
