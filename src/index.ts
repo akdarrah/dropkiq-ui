@@ -1,2 +1,1 @@
-export { AutoComplete } from './AutoComplete';
-export { DropkiqUI } from './DropkiqUI';
+export { default as DropkiqUI } from './DropkiqUI';
