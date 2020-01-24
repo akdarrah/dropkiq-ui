@@ -1,1 +1,1 @@
-export { default as DropkiqUI } from './DropkiqUI';
+export { DropkiqUI } from './DropkiqUI';
