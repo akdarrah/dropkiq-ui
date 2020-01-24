@@ -32,6 +32,7 @@
     "gulp-uglify": "^3.0.2",
     "gulp-uglify-es": "^2.0.0",
     "jest": "^24.9.0",
+    "jsdom": "^16.0.1",
     "node-sass": "^4.13.1",
     "ts-jest": "^24.3.0",
     "ts-loader": "3.5.0",
