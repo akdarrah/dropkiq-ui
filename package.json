@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "author": "Adam Darrah <adam@dropkiq.com>",
   "private": false,
+  "keywords": ["liquid", "liquidjs", "dropkiq", "dropkiq-ui", "shopify"],
   "files": [
     "dist/**/*"
   ],
