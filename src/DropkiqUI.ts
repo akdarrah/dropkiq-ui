@@ -9,6 +9,10 @@ export class DropkiqUI {
   public scope: object;
   public licenseKey: string;
 
+  public options: object;
+  public showPreviews: Function;
+  public showHints: Function;
+
   private dropkiqEngine: any;
   private suggestionsArray: Array<object>;
   private result: object;
@@ -21,13 +25,17 @@ export class DropkiqUI {
   private $poweredByDropkiq: any;
   private $paywall: any;
 
-  constructor(element, schema: object, context: object, scope: object, licenseKey: string = "") {
+  constructor(element, schema: object, context: object, scope: object, licenseKey: string = "", options: object = {}) {
     this.element = element;
     this.boundElement = new BoundElement(this.element);
     this.schema = schema;
     this.context = context;
     this.scope = scope;
     this.licenseKey = licenseKey;
+
+    this.options      = options;
+    this.showPreviews = (typeof(options['showPreviews']) === 'function' ? options['showPreviews'] : () => true);
+    this.showHints    = (typeof(options['showHints']) === 'function' ? options['showHints'] : () => true);
 
     this.dropkiqEngine = new AutoComplete("", 0, schema, context, scope, this.licenseKey);
     this.suggestionsArray = [];
@@ -240,7 +248,7 @@ export class DropkiqUI {
       $li.appendChild($entire);
       $li.setAttribute('title', that.suggestionTitleText(suggestion))
 
-      if(suggestion['hint']){
+      if(suggestion['hint'] && that.showHints()){
         let $hintSpan = document.createElement("div");
         $hintSpan.setAttribute('class', 'hint-icon');
         $hintSpan.setAttribute("aria-label", suggestion['hint']);
@@ -255,7 +263,7 @@ export class DropkiqUI {
         $li.appendChild($hintSpan);
       }
 
-      if(suggestion['preview']){
+      if(suggestion['preview'] && that.showPreviews()){
         let $head = document.createElement("p")
         $head.textContent = "OUTPUT";
 
