@@ -333,6 +333,10 @@ export class DropkiqUI {
     }
 
     this.boundElement.insertTextAtCaret(textToEnter);
+
+    let changeEvent = new Event("change");
+    this.element.dispatchEvent(changeEvent);
+
     this.closeMenu();
   };
 
