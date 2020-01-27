@@ -334,8 +334,18 @@ export class DropkiqUI {
 
     this.boundElement.insertTextAtCaret(textToEnter);
 
-    let changeEvent = new Event("change");
-    this.element.dispatchEvent(changeEvent);
+    let event;
+    if(document.createEvent){
+        event = document.createEvent("HTMLEvents");
+        event.initEvent("change", true, true);
+        event.eventName = "change";
+        this.element.dispatchEvent(event);
+    } else {
+        event = document['createEventObject']();
+        event.eventName = "change";
+        event.eventType = "change";
+        this.element.fireEvent("on" + event.eventType, event);
+    }
 
     this.closeMenu();
   };
