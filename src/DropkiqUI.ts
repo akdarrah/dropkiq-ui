@@ -333,10 +333,6 @@ export class DropkiqUI {
     }
 
     this.boundElement.insertTextAtCaret(textToEnter);
-
-    let event = new Event('change', { bubbles: true });
-    this.element.dispatchEvent(event);
-
     this.closeMenu();
   };
 
