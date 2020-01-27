@@ -333,12 +333,6 @@ export class DropkiqUI {
     }
 
     this.boundElement.insertTextAtCaret(textToEnter);
-
-    var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
-    nativeInputValueSetter.call(this.element, 'react 16 value');
-    var ev2 = new Event('input', { bubbles: true});
-    this.element.dispatchEvent(ev2);
-
     this.closeMenu();
   };
 
