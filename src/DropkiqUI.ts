@@ -1,5 +1,6 @@
 const { AutoComplete } = require('dropkiq')
 import { BoundElement } from './BoundElement'
+import tippy from 'tippy.js';
 
 export class DropkiqUI {
   public element: any;
@@ -251,9 +252,8 @@ export class DropkiqUI {
       if(suggestion['hint'] && that.showHints()){
         let $hintSpan = document.createElement("div");
         $hintSpan.setAttribute('class', 'hint-icon');
-        $hintSpan.setAttribute("aria-label", suggestion['hint']);
-        $hintSpan.setAttribute("data-balloon-pos", "down-right")
-        $hintSpan.setAttribute("data-balloon-length", "large")
+        $hintSpan.setAttribute("data-tippy-content", suggestion['hint']);
+        $hintSpan.setAttribute("title", "");
 
         let imgUrl = "https://app.dropkiq.com/plugin/question-circle.png";
         let $hint = document.createElement("img");
@@ -312,6 +312,8 @@ export class DropkiqUI {
       document.removeEventListener('click', closeMenuAndStopListening);
     }
     document.addEventListener('click', closeMenuAndStopListening);
+
+    tippy('.hint-icon');
   }
 
   private findResults(){

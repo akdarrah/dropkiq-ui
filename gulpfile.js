@@ -8,12 +8,14 @@ const tsify = require('tsify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 
+var importCss = require('gulp-import-css');
 var sass = require('gulp-sass');
 sass.compiler = require('node-sass');
 
 gulp.task('sass', function () {
   return gulp.src('./src/css/dropkiq.scss')
     .pipe(sass().on('error', sass.logError))
+    .pipe(importCss())
     .pipe(gulp.dest('dist'));
 });
 
