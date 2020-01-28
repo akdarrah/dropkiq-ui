@@ -1,6 +1,6 @@
 {
   "name": "dropkiq-ui",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Liquid Expressions Simplified",
   "main": "dist/index.js",
   "author": "Adam Darrah <adam@dropkiq.com>",
