@@ -47,7 +47,7 @@ export class DropkiqUI {
     this.$poweredByDropkiq = document.createElement("div");
     this.$poweredByDropkiq.style.display = "none";
     this.$poweredByDropkiq.style.padding = "5px";
-    this.$poweredByDropkiq.style.height = "24px";
+    this.$poweredByDropkiq.style.height = "14px";
     this.$poweredByDropkiq.style.color = "#666666";
     this.$poweredByDropkiq.style['font-size'] = "10px";
     this.$poweredByDropkiq.style.background = "rgba(240,240,240,0.9)"
