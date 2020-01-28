@@ -17,14 +17,6 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', gulp.series(gulp.parallel('sass'), function () {
-    return tsProject.src()
-        .pipe(tsProject())
-        .js
-        .pipe(uglify(/* options */))
-        .pipe(gulp.dest('dist'));
-}));
-
 gulp.task('js', function() {
   return browserify({
       basedir: '.',
@@ -40,3 +32,11 @@ gulp.task('js', function() {
   .pipe(uglify(/* options */))
   .pipe(gulp.dest('dist'));
 });
+
+gulp.task('default', gulp.series(gulp.parallel('sass'), gulp.parallel('js'), function () {
+  return tsProject.src()
+      .pipe(tsProject())
+      .js
+      .pipe(uglify(/* options */))
+      .pipe(gulp.dest('dist'));
+}));

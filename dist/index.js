@@ -1,1 +1,1 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var DropkiqUI_1=require("./DropkiqUI");exports.DropkiqUI=DropkiqUI_1.DropkiqUI;
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const DropkiqUI_1=require("./DropkiqUI");window.DropkiqUI=DropkiqUI_1.DropkiqUI;var DropkiqUI_2=require("./DropkiqUI");exports.DropkiqUI=DropkiqUI_2.DropkiqUI;
