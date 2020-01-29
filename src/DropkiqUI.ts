@@ -1,4 +1,4 @@
-const { AutoComplete } = require('dropkiq')
+const { DropkiqEngine } = require('dropkiq')
 import { BoundElement } from './BoundElement'
 import tippy from 'tippy.js';
 
@@ -38,7 +38,7 @@ export class DropkiqUI {
     this.showPreviews = (typeof(options['showPreviews']) === 'function' ? options['showPreviews'] : () => true);
     this.showHints    = (typeof(options['showHints']) === 'function' ? options['showHints'] : () => true);
 
-    this.dropkiqEngine = new AutoComplete("", 0, schema, context, scope, this.licenseKey);
+    this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey);
     this.suggestionsArray = [];
     this.result = {};
     this.caretOffset = {};
