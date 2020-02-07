@@ -13,6 +13,7 @@ export class DropkiqUI {
   public options: object;
   public showPreviews: Function;
   public showHints: Function;
+  public suggestionFilter: Function;
 
   private dropkiqEngine: any;
   private suggestionsArray: Array<object>;
@@ -34,11 +35,12 @@ export class DropkiqUI {
     this.scope = scope;
     this.licenseKey = licenseKey;
 
-    this.options      = options;
-    this.showPreviews = (typeof(options['showPreviews']) === 'function' ? options['showPreviews'] : () => true);
-    this.showHints    = (typeof(options['showHints']) === 'function' ? options['showHints'] : () => true);
+    this.options          = options;
+    this.showPreviews     = (typeof(options['showPreviews']) === 'function' ? options['showPreviews'] : () => true);
+    this.showHints        = (typeof(options['showHints']) === 'function' ? options['showHints'] : () => true);
+    this.suggestionFilter = (typeof(options['suggestionFilter']) === 'function' ? options['suggestionFilter'] : () => {});
 
-    this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey);
+    this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey, {suggestionFilter: this.suggestionFilter});
     this.suggestionsArray = [];
     this.result = {};
     this.caretOffset = {};

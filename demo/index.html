@@ -121,10 +121,19 @@
           ]
         }
       };
-        
+
+      var suggestionFilter = function(suggestions){
+        Object.keys(suggestions).forEach(function(name){
+          if(name === 'email_from'){
+            var suggestion = suggestions[name];
+            suggestion['preview'] = "Preview overridden in suggestionFilter";
+          }
+        });
+      }
+
       // Initialize the Standard DropkiqUI for demo elements
       // https://www.npmjs.com/package/dropkiq-ui
-      new DropkiqUI(document.getElementById('dropkiq-example'), schema, context, scope, "");
+      new DropkiqUI(document.getElementById('dropkiq-example'), schema, context, scope, "", {suggestionFilter: suggestionFilter});
     </script>    
   </body>
 </html>
