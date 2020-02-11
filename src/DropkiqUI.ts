@@ -140,9 +140,6 @@ export class DropkiqUI {
     this.element.addEventListener("click", callback);
     this.element.addEventListener("focus", callback);
 
-    // https://stackoverflow.com/questions/23544937/how-to-detect-contenteditable-cursor-position-change-safari-ipad-ios-7
-    document.addEventListener("selectionchange", callback);
-
     // Auto-complete {{}} and {%%}
     this.element.addEventListener("keydown", function(e){
       setTimeout(function(){
