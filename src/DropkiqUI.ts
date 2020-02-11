@@ -130,7 +130,7 @@ export class DropkiqUI {
       if(that.menuMode){ return; }
       setTimeout(function(){
         that.findResults.apply(that);
-      }, 1);
+      }, 25);
     }
 
     this.element.addEventListener("focusout", function(){
@@ -160,7 +160,7 @@ export class DropkiqUI {
           that.boundElement.setCaretPosition(selectionStart, textNode);
           that.element.focus();
         }
-      }, 1);
+      }, 25);
 
       callback();
     });
