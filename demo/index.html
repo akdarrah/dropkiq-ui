@@ -130,9 +130,13 @@
         });
       }
 
+      var onRender = function(renderedDocument){
+        console.log("Rendered:", renderedDocument);
+      }
+
       // Initialize the Standard DropkiqUI for demo elements
       // https://www.npmjs.com/package/dropkiq-ui
-      new DropkiqUI(document.getElementById('dropkiq-example'), schema, context, scope, "", {suggestionFilter: suggestionFilter});
+      new DropkiqUI(document.getElementById('dropkiq-example'), schema, context, scope, "", {suggestionFilter: suggestionFilter, onRender: onRender});
     </script>    
   </body>
 </html>

@@ -14,6 +14,7 @@ export class DropkiqUI {
   public showPreviews: Function;
   public showHints: Function;
   public suggestionFilter: Function;
+  public onRender: Function;
 
   private dropkiqEngine: any;
   private suggestionsArray: Array<object>;
@@ -39,6 +40,7 @@ export class DropkiqUI {
     this.showPreviews     = (typeof(options['showPreviews']) === 'function' ? options['showPreviews'] : () => true);
     this.showHints        = (typeof(options['showHints']) === 'function' ? options['showHints'] : () => true);
     this.suggestionFilter = (typeof(options['suggestionFilter']) === 'function' ? options['suggestionFilter'] : () => {});
+    this.onRender = (typeof(options['onRender']) === 'function' ? options['onRender'] : () => {});
 
     this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey, {suggestionFilter: this.suggestionFilter});
     this.suggestionsArray = [];
@@ -323,6 +325,7 @@ export class DropkiqUI {
 
     this.caretOffset = this.boundElement.getCaretPosition();
     this.result = this.dropkiqEngine.update(result['allText'], result['selectionStart']);
+    this.onRender(this.result['renderedDocument']);
     this.pathSchema  = this.result['pathSchema'];
     let emptyArray: Array<Object> = [];
     this.suggestionsArray = this.result['suggestionsArray'] || emptyArray;
