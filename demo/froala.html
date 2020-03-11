@@ -131,13 +131,13 @@
 
             // Initialize the Standard DropkiqUI for demo elements
             // https://www.npmjs.com/package/dropkiq-ui
-            new DropkiqUI(editor.el, schema, context, scope, "");
+            var dropkiqUI = new DropkiqUI(editor.el, schema, context, scope, "");
 
-            // editor.events.on('keydown', function(e) {
-            //   // if (e.which == FroalaEditor.KEYCODE.ENTER && tribute.isActive) {
-            //   //   return false;
-            //   // }
-            // }, true);
+            editor.events.on('keydown', function(e) {
+              if (e.which == FroalaEditor.KEYCODE.ENTER && dropkiqUI.menuMode) {
+                return false;
+              }
+            }, true);
           }
         }
       })
