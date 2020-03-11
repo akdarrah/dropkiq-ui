@@ -124,23 +124,23 @@
         }
       };
 
-      var suggestionFilter = function(suggestions){
-        suggestions.forEach(function(suggestion){
-          if(suggestion.name === 'email_from'){
-            suggestion['preview'] = "Preview overridden in suggestionFilter";
+      new FroalaEditor('#dropkiq-example', {
+        events: {
+          initialized: function() {
+            var editor = this;
+
+            // Initialize the Standard DropkiqUI for demo elements
+            // https://www.npmjs.com/package/dropkiq-ui
+            new DropkiqUI(editor.el, schema, context, scope, "");
+
+            // editor.events.on('keydown', function(e) {
+            //   // if (e.which == FroalaEditor.KEYCODE.ENTER && tribute.isActive) {
+            //   //   return false;
+            //   // }
+            // }, true);
           }
-        });
-      }
-
-      var onRender = function(renderedDocument){
-        console.log("Rendered:", renderedDocument);
-      }
-
-      var editor = new FroalaEditor('#dropkiq-example');
-
-      // Initialize the Standard DropkiqUI for demo elements
-      // https://www.npmjs.com/package/dropkiq-ui
-      // new DropkiqUI(document.getElementById('dropkiq-example'), schema, context, scope, "", {suggestionFilter: suggestionFilter, onRender: onRender});
+        }
+      })
     </script>    
   </body>
 </html>
