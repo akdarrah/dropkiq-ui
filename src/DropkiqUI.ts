@@ -15,13 +15,13 @@ export class DropkiqUI {
   public showHints: Function;
   public suggestionFilter: Function;
   public onRender: Function;
+  public menuMode: boolean;
 
   private dropkiqEngine: any;
   private suggestionsArray: Array<object>;
   private result: object;
   private caretOffset: object;
   private pathSchema: [];
-  private menuMode: boolean;
   private $ul: any;
   private $header: any;
   private $div: any;
@@ -331,6 +331,7 @@ export class DropkiqUI {
     this.suggestionsArray = this.result['suggestionsArray'] || emptyArray;
 
     if(this.suggestionsArray.length > 0){
+      this.menuMode = true;
       this.suggestionsArray[0]['active'] = true;
     }
 
