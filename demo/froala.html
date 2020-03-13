@@ -129,15 +129,12 @@
 
       new FroalaEditor('#dropkiq-example', {
         iframe: true,
+        heightMin: 100,
+        iframeStyleFiles: ['https://unpkg.com/dropkiq-ui@1.0.35/dist/dropkiq.css'],
         events: {
           initialized: function() {
             var editor = this;
             var iframe = document.getElementsByClassName("fr-iframe")[0];
-
-            var head = $(iframe).contents().find("head");
-            $.get("https://unpkg.com/dropkiq-ui@1.0.35/dist/dropkiq.css", function(cssContent){
-              $(head).append("<style>" + cssContent + "</style>");
-            });
 
             // Initialize the Standard DropkiqUI for demo elements
             // https://www.npmjs.com/package/dropkiq-ui
