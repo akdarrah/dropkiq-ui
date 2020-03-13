@@ -132,37 +132,8 @@
         iframeStyleFiles: ['https://unpkg.com/dropkiq-ui@1.0.35/dist/dropkiq.css'],
         events: {
           initialized: function() {
-            var editor         = this;
-            var iframe         = document.getElementsByClassName("fr-iframe")[0];
-            var body           = editor.el;
-            var iFrameWindow   = iframe.contentWindow;
-            var iFrameDocument = iFrameWindow.document;
-
-            // This next section is to dynamically adjust the height of the iFrame.
-            // The iFrame will calculate its own height, and send that to the document
-            // that it is embedded within using postHeight.
-            var html = iFrameDocument.documentElement;
-            var postHeight = function(){
-              var height = Math.max( body.scrollHeight, body.offsetHeight,
-                                html.clientHeight, html.scrollHeight, html.offsetHeight );
-
-              iFrameWindow.parent.postMessage({height: height}, "*");
-            }
-            iFrameWindow.addEventListener('load', postHeight);
-            iFrameWindow.addEventListener("resize", postHeight);
-
-            // Next, we'll listen from the main document and adjust the
-            // height based on what is reported.
-            function resizeIframe (event) {
-              var height = event.data.height;              
-              iframe.style.height = (height + "px");
-            }
-            if (window.addEventListener) {
-              // For standards-compliant web browsers
-              window.addEventListener("message", resizeIframe, false);
-            } else {
-              window.attachEvent("onmessage", resizeIframe);
-            }
+            var editor = this;
+            var iframe = document.getElementsByClassName("fr-iframe")[0];
 
             // Initialize the Standard DropkiqUI for demo elements
             // https://www.npmjs.com/package/dropkiq-ui
