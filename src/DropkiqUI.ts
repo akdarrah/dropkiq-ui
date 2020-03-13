@@ -16,6 +16,9 @@ export class DropkiqUI {
   public suggestionFilter: Function;
   public onRender: Function;
   public menuMode: boolean;
+  public iframe: any;
+  public document: any;
+  public window: any;
 
   private dropkiqEngine: any;
   private suggestionsArray: Array<object>;
@@ -29,8 +32,6 @@ export class DropkiqUI {
   private $paywall: any;
 
   constructor(element, schema: object, context: object, scope: object, licenseKey: string = "", options: object = {}) {
-    this.element = element;
-    this.boundElement = new BoundElement(this.element);
     this.schema = schema;
     this.context = context;
     this.scope = scope;
@@ -40,7 +41,19 @@ export class DropkiqUI {
     this.showPreviews     = (typeof(options['showPreviews']) === 'function' ? options['showPreviews'] : () => true);
     this.showHints        = (typeof(options['showHints']) === 'function' ? options['showHints'] : () => true);
     this.suggestionFilter = (typeof(options['suggestionFilter']) === 'function' ? options['suggestionFilter'] : () => {});
-    this.onRender = (typeof(options['onRender']) === 'function' ? options['onRender'] : () => {});
+    this.onRender         = (typeof(options['onRender']) === 'function' ? options['onRender'] : () => {});
+    this.iframe           = options['iframe'];
+
+    if(this.iframe){
+      this.window   = this.iframe.contentWindow;
+      this.document = this.window.document;
+    } else {
+      this.window   = window;
+      this.document = document;
+    }
+
+    this.element = element;
+    this.boundElement = new BoundElement(this.element, this.window, this.document);
 
     this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey, {suggestionFilter: this.suggestionFilter});
     this.suggestionsArray = [];
@@ -49,7 +62,7 @@ export class DropkiqUI {
     this.pathSchema = [];
     this.menuMode = false;
 
-    this.$poweredByDropkiq = document.createElement("div");
+    this.$poweredByDropkiq = this.document.createElement("div");
     this.$poweredByDropkiq.style.display = "none";
     this.$poweredByDropkiq.style.padding = "5px";
     this.$poweredByDropkiq.style.height = "24px";
@@ -57,8 +70,8 @@ export class DropkiqUI {
     this.$poweredByDropkiq.style['font-size'] = "10px";
     this.$poweredByDropkiq.style.background = "rgba(240,240,240,0.9)"
     this.$poweredByDropkiq.style['text-align'] = "right"
-    let poweredByText = document.createTextNode("Powered by");
-    let $dropkiqImg = document.createElement("img");
+    let poweredByText = this.document.createTextNode("Powered by");
+    let $dropkiqImg = this.document.createElement("img");
     $dropkiqImg.setAttribute('src', "https://app.dropkiq.com/plugin/dropkiq-sm.png")
     $dropkiqImg.style.width = "48px";
     $dropkiqImg.style.height = "10px";
@@ -66,22 +79,22 @@ export class DropkiqUI {
     this.$poweredByDropkiq.appendChild(poweredByText);
     this.$poweredByDropkiq.appendChild($dropkiqImg);
 
-    this.$paywall = document.createElement("div");
+    this.$paywall = this.document.createElement("div");
     this.$paywall.style['font-size'] = "14px"
     this.$paywall.style.padding = "10px"
     this.$paywall.style['color'] = "#666666"
     this.$paywall.display = "none"
 
-    this.$ul = document.createElement("ul");
-    this.$header = document.createElement("div");
+    this.$ul = this.document.createElement("ul");
+    this.$header = this.document.createElement("div");
     this.$header.setAttribute('class', 'dropkiq-header');
-    this.$div = document.createElement("div")
+    this.$div = this.document.createElement("div")
     this.$div.setAttribute('id', 'dropkiq-autosuggest-menu');
     this.$div.appendChild(this.$header);
     this.$div.appendChild(this.$ul);
     this.$div.appendChild(this.$paywall);
     this.$div.appendChild(this.$poweredByDropkiq);
-    document.body.appendChild(this.$div);
+    this.document.body.appendChild(this.$div);
 
     let that = this;
     this.element.addEventListener('keydown', function(e) {
@@ -185,14 +198,14 @@ export class DropkiqUI {
 
     if(lastPathNode && lastPathNode.type === "ColumnTypes::HasOne"){
       let imgUrl = "https://app.dropkiq.com/plugin/object.png";
-      let $icon = document.createElement("img");
+      let $icon = this.document.createElement("img");
 
       $icon.setAttribute('src', imgUrl);
       $icon.setAttribute('class', 'icon');
       $icon.setAttribute('width', '16px');
       $icon.setAttribute('height', '16px');
 
-      let $text = document.createElement("span");
+      let $text = this.document.createElement("span");
       $text.textContent = lastPathNode.name;
 
       this.$header.appendChild($icon);
@@ -212,22 +225,22 @@ export class DropkiqUI {
 
     let that = this;
     this.suggestionsArray.forEach(function(suggestion){
-      let $li = document.createElement("li");
+      let $li = that.document.createElement("li");
 
       let imgUrl = suggestion['iconImageURLForSuggestion'];
-      let $icon = document.createElement("img");
+      let $icon = that.document.createElement("img");
       $icon.setAttribute('src', imgUrl);
       $icon.setAttribute('class', 'icon');
       $icon.setAttribute('width', '16px');
       $icon.setAttribute('height', '16px');
 
-      let $entire = document.createElement("div");
+      let $entire = that.document.createElement("div");
       $entire.setAttribute('class', "first-line");
 
-      let $extra = document.createElement("div");
+      let $extra = that.document.createElement("div");
       $extra.setAttribute('class', 'extra');
-      let $remaining = document.createElement("span");
-      let $arrowSpan = document.createElement("img");
+      let $remaining = that.document.createElement("span");
+      let $arrowSpan = that.document.createElement("img");
       $arrowSpan.setAttribute('class', 'right-arrow');
       $arrowSpan.setAttribute('src', "https://app.dropkiq.com/plugin/next-level.png");
 
@@ -235,7 +248,7 @@ export class DropkiqUI {
       $entire.appendChild($arrowSpan);
 
       if(prefix){
-        let $strong = document.createElement("strong");
+        let $strong = that.document.createElement("strong");
 
         $strong.textContent = prefix;
         let suggestionName = suggestion['name'];
@@ -250,13 +263,13 @@ export class DropkiqUI {
       $li.setAttribute('title', that.suggestionTitleText(suggestion))
 
       if(suggestion['hint'] && that.showHints()){
-        let $hintSpan = document.createElement("div");
+        let $hintSpan = that.document.createElement("div");
         $hintSpan.setAttribute('class', 'hint-icon');
         $hintSpan.setAttribute("data-tippy-content", suggestion['hint']);
         $hintSpan.setAttribute("title", "");
 
         let imgUrl = "https://app.dropkiq.com/plugin/question-circle.png";
-        let $hint = document.createElement("img");
+        let $hint = that.document.createElement("img");
         $hint.setAttribute('src', imgUrl);
 
         $hintSpan.appendChild($hint);
@@ -264,10 +277,10 @@ export class DropkiqUI {
       }
 
       if(suggestion['preview'] && that.showPreviews()){
-        let $head = document.createElement("p")
+        let $head = that.document.createElement("p")
         $head.textContent = "OUTPUT";
 
-        let $samp = document.createElement("samp");
+        let $samp = that.document.createElement("samp");
         $samp.textContent = suggestion['preview'];
 
         $extra.appendChild($head);
@@ -292,15 +305,15 @@ export class DropkiqUI {
       this.$ul.innerHTML = '';
       this.$paywall.style.display = 'block';
 
-      let previewText = document.createElement('p');
+      let previewText = this.document.createElement('p');
       let dropkiqSuggestion = this.suggestionsArray[0];
       if(dropkiqSuggestion){
         previewText.textContent = dropkiqSuggestion['hint'];
       }
       this.$paywall.appendChild(previewText);
 
-      let purchaseLinkP = document.createElement('p');
-      let purchaseLink = document.createElement('a');
+      let purchaseLinkP = this.document.createElement('p');
+      let purchaseLink = this.document.createElement('a');
       purchaseLink.textContent = "Purchase to unlock"
       purchaseLink.setAttribute('href', "http://dropkiq.com")
       purchaseLinkP.appendChild(purchaseLink)
@@ -309,9 +322,9 @@ export class DropkiqUI {
 
     let closeMenuAndStopListening = function(){
       that.closeMenu();
-      document.removeEventListener('click', closeMenuAndStopListening);
+      that.document.removeEventListener('click', closeMenuAndStopListening);
     }
-    document.addEventListener('click', closeMenuAndStopListening);
+    this.document.addEventListener('click', closeMenuAndStopListening);
 
     tippy('.hint-icon');
   }
