@@ -16,6 +16,9 @@ export class DropkiqUI {
   public suggestionFilter: Function;
   public onRender: Function;
   public menuMode: boolean;
+  public iframe: any;
+  public document: any;
+  public window: any;
 
   private dropkiqEngine: any;
   private suggestionsArray: Array<object>;
@@ -29,8 +32,6 @@ export class DropkiqUI {
   private $paywall: any;
 
   constructor(element, schema: object, context: object, scope: object, licenseKey: string = "", options: object = {}) {
-    this.element = element;
-    this.boundElement = new BoundElement(this.element);
     this.schema = schema;
     this.context = context;
     this.scope = scope;
@@ -40,7 +41,19 @@ export class DropkiqUI {
     this.showPreviews     = (typeof(options['showPreviews']) === 'function' ? options['showPreviews'] : () => true);
     this.showHints        = (typeof(options['showHints']) === 'function' ? options['showHints'] : () => true);
     this.suggestionFilter = (typeof(options['suggestionFilter']) === 'function' ? options['suggestionFilter'] : () => {});
-    this.onRender = (typeof(options['onRender']) === 'function' ? options['onRender'] : () => {});
+    this.onRender         = (typeof(options['onRender']) === 'function' ? options['onRender'] : () => {});
+    this.iframe           = options['iframe'];
+
+    if(this.iframe){
+      this.window   = this.iframe.contentWindow;
+      this.document = this.window.document;
+    } else {
+      this.window   = window;
+      this.document = document;
+    }
+
+    this.element = element;
+    this.boundElement = new BoundElement(this.element, this.window, this.document);
 
     this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey, {suggestionFilter: this.suggestionFilter});
     this.suggestionsArray = [];
@@ -309,9 +322,17 @@ export class DropkiqUI {
 
     let closeMenuAndStopListening = function(){
       that.closeMenu();
+
       document.removeEventListener('click', closeMenuAndStopListening);
+      if(that.document !== document){
+        that.document.removeEventListener('click', closeMenuAndStopListening);
+      }
     }
+
     document.addEventListener('click', closeMenuAndStopListening);
+    if(this.document !== document){
+      this.document.addEventListener('click', closeMenuAndStopListening);
+    }
 
     tippy('.hint-icon');
   }
@@ -320,6 +341,13 @@ export class DropkiqUI {
     let result = this.boundElement.caretPositionWithDocumentInfo();
 
     this.caretOffset = this.boundElement.getCaretPosition();
+
+    if(this.iframe){
+      var iframeRect = this.iframe.getBoundingClientRect();
+      this.caretOffset['top'] = (this.caretOffset['top'] + iframeRect.top);
+      this.caretOffset['left'] = (this.caretOffset['left'] + iframeRect.left);
+    }
+
     this.result = this.dropkiqEngine.update(result['allText'], result['selectionStart']);
     this.onRender(this.result['renderedDocument']);
     this.pathSchema  = this.result['pathSchema'];

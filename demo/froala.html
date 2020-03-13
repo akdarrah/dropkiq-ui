@@ -125,13 +125,15 @@
       };
 
       new FroalaEditor('#dropkiq-example', {
+        iframe: true,
         events: {
           initialized: function() {
             var editor = this;
+            var iframe = document.getElementsByClassName("fr-iframe")[0];
 
             // Initialize the Standard DropkiqUI for demo elements
             // https://www.npmjs.com/package/dropkiq-ui
-            var dropkiqUI = new DropkiqUI(editor.el, schema, context, scope, "");
+            var dropkiqUI = new DropkiqUI(editor.el, schema, context, scope, "", {iframe: iframe});
 
             editor.events.on('keydown', function(e) {
               if (e.which == FroalaEditor.KEYCODE.ENTER && dropkiqUI.menuMode) {

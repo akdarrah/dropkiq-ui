@@ -12,6 +12,9 @@ export declare class DropkiqUI {
     suggestionFilter: Function;
     onRender: Function;
     menuMode: boolean;
+    iframe: any;
+    document: any;
+    window: any;
     private dropkiqEngine;
     private suggestionsArray;
     private result;

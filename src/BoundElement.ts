@@ -1,9 +1,13 @@
 export class BoundElement {
   public element: any;
+  public window: any;
+  public document: any;
   public isContenteditable: boolean;
 
-  constructor(element) {
+  constructor(element, window, document) {
     this.element = element;
+    this.window = window;
+    this.document = document;
     this.isContenteditable = this.element.isContentEditable;
   }
 
@@ -18,8 +22,8 @@ export class BoundElement {
   // position is for input, textNode is for contenteditable
   public setCaretPosition(position, textNode){
     if (this.isContenteditable){
-      var range = document.createRange();
-      var sel = window.getSelection();
+      var range = this.document.createRange();
+      var sel = this.window.getSelection();
       range.setStart(textNode, 0);
       range.collapse(true);
       sel.removeAllRanges();
@@ -31,7 +35,7 @@ export class BoundElement {
 
   public getCaretPosition(){
     if (this.isContenteditable){
-      let selection = window.getSelection();
+      let selection = this.window.getSelection();
       let range = selection.getRangeAt(0);
       return this.getContentEditableCaretPosition(range.startOffset);
     } else {
@@ -52,10 +56,10 @@ export class BoundElement {
 
   private insertTextForContenteditable(text) {
     var sel, range, html;
-    sel = window.getSelection();
+    sel = this.window.getSelection();
     range = sel.getRangeAt(0);
     range.deleteContents();
-    var textNode = document.createTextNode(text);
+    var textNode = this.document.createTextNode(text);
     range.insertNode(textNode);
     range.selectNodeContents(textNode)
     range.collapse(false)
@@ -97,7 +101,7 @@ export class BoundElement {
   }
 
   public caretPositionWithDocumentInfoForContenteditable(): object {
-    let selection = window.getSelection();
+    let selection = this.window.getSelection();
     let range = selection.getRangeAt(0);
 
     // Left
@@ -123,12 +127,12 @@ export class BoundElement {
   private captureRangeText(range): string {
     let documentFragment = range.cloneContents();
 
-    let elemClone = document.createElement("div");
+    let elemClone = this.document.createElement("div");
     elemClone.setAttribute('style', "position: absolute; left: -10000px; top: -10000px");
     elemClone.setAttribute('contenteditable', 'true');
 
     elemClone.appendChild(documentFragment);
-    document.body.appendChild(elemClone);
+    this.document.body.appendChild(elemClone);
     let captureText = elemClone.innerText;
     elemClone.remove();
 
@@ -146,14 +150,14 @@ export class BoundElement {
           'textDecoration', 'letterSpacing', 'wordSpacing'
       ]
 
-      let isFirefox = (window['mozInnerScreenX'] !== null)
+      let isFirefox = (this.window['mozInnerScreenX'] !== null)
 
-      let div = document.createElement('div')
+      let div = this.document.createElement('div')
       div.id = 'input-textarea-caret-position-mirror-div'
-      document.body.appendChild(div)
+      this.document.body.appendChild(div)
 
       let style = div.style
-      let computed = window.getComputedStyle ? getComputedStyle(element) : element.currentStyle
+      let computed = this.window.getComputedStyle ? getComputedStyle(element) : element.currentStyle
 
       style.whiteSpace = 'pre-wrap'
       if (element.nodeName !== 'INPUT') {
@@ -183,14 +187,14 @@ export class BoundElement {
           div.textContent = div.textContent.replace(/\s/g, ' ')
       }
 
-      let span = document.createElement('span')
+      let span = this.document.createElement('span')
       span.textContent = element.value.substring(position) || '.'
       div.appendChild(span)
 
       let rect = element.getBoundingClientRect()
-      let doc = document.documentElement
-      let windowLeft = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0)
-      let windowTop = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0)
+      let doc = this.document.documentElement
+      let windowLeft = (this.window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0)
+      let windowTop = (this.window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0)
 
       let top = 0;
       let left = 0;
@@ -243,7 +247,7 @@ export class BoundElement {
       //     delete coordinates.bottom
       // }
 
-      document.body.removeChild(div)
+      this.document.body.removeChild(div)
       return coordinates
   }
 
@@ -251,28 +255,28 @@ export class BoundElement {
       let markerTextChar = '﻿'
       let markerEl, markerId = `sel_${new Date().getTime()}_${Math.random().toString().substr(2)}`
       let range
-      let sel = window.getSelection();
+      let sel = this.window.getSelection();
       let prevRange = sel.getRangeAt(0)
 
-      range = document.createRange()
+      range = this.document.createRange()
       range.setStart(sel.anchorNode, selectedNodePosition)
       range.setEnd(sel.anchorNode, selectedNodePosition)
 
       range.collapse(false)
 
       // Create the marker element containing a single invisible character using DOM methods and insert it
-      markerEl = document.createElement('span')
+      markerEl = this.document.createElement('span')
       markerEl.id = markerId
 
-      markerEl.appendChild(document.createTextNode(markerTextChar))
+      markerEl.appendChild(this.document.createTextNode(markerTextChar))
       range.insertNode(markerEl)
       sel.removeAllRanges()
       sel.addRange(prevRange)
 
       let rect = markerEl.getBoundingClientRect()
-      let doc = document.documentElement
-      let windowLeft = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0)
-      let windowTop = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0)
+      let doc = this.document.documentElement
+      let windowLeft = (this.window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0)
+      let windowTop = (this.window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0)
 
       let left = 0
       let top = 0
