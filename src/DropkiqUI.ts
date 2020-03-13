@@ -135,10 +135,6 @@ export class DropkiqUI {
       }, 25);
     }
 
-    this.element.addEventListener("focusout", function(){
-      that.boundElement.saveSelection();
-    });
-
     this.element.addEventListener("click", callback);
     this.element.addEventListener("focus", callback);
 

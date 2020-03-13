@@ -1,7 +1,6 @@
 export class BoundElement {
   public element: any;
   public isContenteditable: boolean;
-  public previousRange: any;
 
   constructor(element) {
     this.element = element;
@@ -43,26 +42,9 @@ export class BoundElement {
 
   public insertTextAtCaret(text){
     if (this.isContenteditable){
-      if(this.previousRange){
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(this.previousRange);
-
-        this.previousRange = null;
-      }
-
       return this.insertTextForContenteditable(text)
     } else {
       return this.insertTextForInput(text)
-    }
-  }
-
-  public saveSelection(){
-    if (this.isContenteditable){
-      let selection = window.getSelection();
-      let range = selection.getRangeAt(0);
-
-      this.previousRange = range.cloneRange();
     }
   }
 
