@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var ts = require('gulp-typescript');
 var tsProject = ts.createProject('tsconfig.json');
 var uglify = require('gulp-uglify-es').default;
+const merge = require('merge2')
 
 const browserify = require('browserify');
 const tsify = require('tsify');
@@ -36,9 +37,12 @@ gulp.task('js', function() {
 });
 
 gulp.task('default', gulp.series(gulp.parallel('sass'), gulp.parallel('js'), function () {
-  return tsProject.src()
-      .pipe(tsProject())
-      .js
-      .pipe(uglify(/* options */))
-      .pipe(gulp.dest('dist'));
+  const tsResult =
+    tsProject.src()
+    .pipe(tsProject())
+
+  return merge([
+    tsResult.dts.pipe(gulp.dest('dist/types')),
+    tsResult.js.pipe(uglify(/* options */)).pipe(gulp.dest('dist'))
+  ]);
 }));

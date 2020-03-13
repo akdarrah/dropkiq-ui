@@ -3,6 +3,7 @@
   "version": "1.0.36",
   "description": "Liquid Expressions Simplified",
   "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "author": "Adam Darrah <adam@dropkiq.com>",
   "private": false,
   "keywords": [
@@ -45,6 +46,7 @@
     "jest": "^24.9.0",
     "jsdom": "^16.0.1",
     "lodash.template": "^4.5.0",
+    "merge2": "^1.3.0",
     "node-sass": "^4.13.1",
     "ts-jest": "^24.3.0",
     "ts-loader": "3.5.0",

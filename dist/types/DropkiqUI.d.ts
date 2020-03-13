@@ -1,0 +1,33 @@
+import { BoundElement } from './BoundElement';
+export declare class DropkiqUI {
+    element: any;
+    boundElement: BoundElement;
+    schema: object;
+    context: object;
+    scope: object;
+    licenseKey: string;
+    options: object;
+    showPreviews: Function;
+    showHints: Function;
+    suggestionFilter: Function;
+    onRender: Function;
+    menuMode: boolean;
+    private dropkiqEngine;
+    private suggestionsArray;
+    private result;
+    private caretOffset;
+    private pathSchema;
+    private $ul;
+    private $header;
+    private $div;
+    private $poweredByDropkiq;
+    private $paywall;
+    constructor(element: any, schema: object, context: object, scope: object, licenseKey?: string, options?: object);
+    private renderSuggestions;
+    private findResults;
+    private insertSuggestion;
+    private scrollToNext;
+    private scrollToPrevious;
+    private closeMenu;
+    private suggestionTitleText;
+}
