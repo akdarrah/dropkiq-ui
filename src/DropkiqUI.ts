@@ -341,6 +341,13 @@ export class DropkiqUI {
     let result = this.boundElement.caretPositionWithDocumentInfo();
 
     this.caretOffset = this.boundElement.getCaretPosition();
+
+    if(this.iframe){
+      var iframeRect = this.iframe.getBoundingClientRect();
+      this.caretOffset['top'] = (this.caretOffset['top'] + iframeRect.top);
+      this.caretOffset['left'] = (this.caretOffset['left'] + iframeRect.left);
+    }
+
     this.result = this.dropkiqEngine.update(result['allText'], result['selectionStart']);
     this.onRender(this.result['renderedDocument']);
     this.pathSchema  = this.result['pathSchema'];
