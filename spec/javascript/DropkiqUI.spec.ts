@@ -109,6 +109,66 @@ describe('DropkiqUI#constructor', () => {
   })
 })
 
+describe('DropkiqUI#findResults', () => {
+  it('populates results for a valid Liquid expression', () => {
+	  let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+
+    let boundElement = dropkiqUI['boundElement'];
+
+    boundElement.caretPositionWithDocumentInfo = function(){
+      return {
+        leftText: "{{ ",
+        selectionStart: 3,
+        rightText: " }}",
+        allText: ("{{  }}")
+      }
+    }
+
+    boundElement.getCaretPosition = function(){
+      return {
+        top: 1000,
+        left: 4000,
+      }
+    }
+
+    expect(dropkiqUI['result']).toStrictEqual({});
+    dropkiqUI['findResults']()
+    expect(dropkiqUI['result']['suggestionsArray'].length).toBe(1);
+  })
+
+  it('silences ParseErrors from unfinished Liquid expressions', () => {
+	  let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+
+    let boundElement = dropkiqUI['boundElement'];
+
+    boundElement.caretPositionWithDocumentInfo = function(){
+      return {
+        leftText: "{% f",
+        selectionStart: 4,
+        rightText: " %}",
+        allText: ("{% f %}")
+      }
+    }
+
+    boundElement.getCaretPosition = function(){
+      return {
+        top: 1000,
+        left: 4000,
+      }
+    }
+
+    expect(dropkiqUI['result']).toStrictEqual({});
+    expect(function() {
+      dropkiqUI['findResults']()
+    }).not.toThrow();
+    expect(dropkiqUI['result']).toStrictEqual({});
+  })
+})
+
 describe('DropkiqUI#scrollToNext', () => {
   it('can go to the next suggestion', () => {
     let element = document.getElementById('dropkiq-example');

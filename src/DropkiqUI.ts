@@ -348,7 +348,16 @@ export class DropkiqUI {
       this.caretOffset['left'] = (this.caretOffset['left'] + iframeRect.left);
     }
 
-    this.result = this.dropkiqEngine.update(result['allText'], result['selectionStart']);
+    try {
+      this.result = this.dropkiqEngine.update(result['allText'], result['selectionStart']);
+    } catch(error) {
+      if (error.name === "ParseError") {
+        return false;
+      } else {
+        throw error;
+      }
+    }
+
     this.onRender(this.result['renderedDocument']);
     this.pathSchema  = this.result['pathSchema'];
     let emptyArray: Array<Object> = [];
