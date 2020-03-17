@@ -38,7 +38,17 @@ export class BoundElement {
   }
 
   public getCaretPosition(){
-    if (this.isContenteditable){
+    if (this.isCodeMirror){
+      let coords   = this.element.cursorCoords(true);
+      let lineDiv  = this.element.display.lineDiv;
+      let computed = this.window.getComputedStyle ? getComputedStyle(lineDiv) : lineDiv.currentStyle;
+      let vOffset  = 5;
+
+      return {
+        top: coords.top + parseInt(computed.fontSize) + parseInt(computed.borderTopWidth) - lineDiv.scrollTop + vOffset,
+        left: coords.left + parseInt(computed.borderLeftWidth)
+      }
+    } else if (this.isContenteditable){
       let selection = this.window.getSelection();
       let range = selection.getRangeAt(0);
       return this.getContentEditableCaretPosition(range.startOffset);

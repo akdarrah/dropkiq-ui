@@ -338,11 +338,7 @@ export class DropkiqUI {
   }
 
   private findResults(){
-    let result = this.boundElement.caretPositionWithDocumentInfo();
-
-    console.log(result);
-    return false;
-
+    let result       = this.boundElement.caretPositionWithDocumentInfo();
     this.caretOffset = this.boundElement.getCaretPosition();
 
     if(this.iframe){
