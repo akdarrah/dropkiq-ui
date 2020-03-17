@@ -42,10 +42,10 @@ export class BoundElement {
       let coords   = this.element.cursorCoords(true);
       let lineDiv  = this.element.display.lineDiv;
       let computed = this.window.getComputedStyle ? getComputedStyle(lineDiv) : lineDiv.currentStyle;
-      let vOffset  = 5;
+      let nextLine = (this.element.getCursor(true).line + 1);
 
       return {
-        top: coords.top + parseInt(computed.fontSize) + parseInt(computed.borderTopWidth) - lineDiv.scrollTop + vOffset,
+        top: this.element.heightAtLine(nextLine),
         left: coords.left + parseInt(computed.borderLeftWidth)
       }
     } else if (this.isContenteditable){
