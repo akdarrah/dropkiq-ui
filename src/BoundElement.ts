@@ -59,7 +59,10 @@ export class BoundElement {
   }
 
   public insertTextAtCaret(text){
-    if (this.isContenteditable){
+    if (this.isCodeMirror){
+      let coords = this.element.getCursor(true);
+      this.element.doc.replaceRange(text, coords, coords);
+    } else if (this.isContenteditable){
       return this.insertTextForContenteditable(text)
     } else {
       return this.insertTextForInput(text)

@@ -97,7 +97,7 @@ export class DropkiqUI {
     document.body.appendChild(this.$div);
 
     let that = this;
-    this.element.on('keydown', function(e) {
+    this.element.on('keydown', function(cm, e) {
       that.menuMode = true;
 
       if(!that.suggestionsArray.length){
@@ -152,7 +152,7 @@ export class DropkiqUI {
     this.element.on("focus", callback);
 
     // Auto-complete {{}} and {%%}
-    this.element.on("keydown", function(e){
+    this.element.on("keydown", function(cm, e){
       setTimeout(function(){
         let result = that.boundElement.caretPositionWithDocumentInfo();
 
