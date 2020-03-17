@@ -13,6 +13,15 @@ export class BoundElement {
     this.isCodeMirror = this.element.constructor.name === 'CodeMirror';
   }
 
+  public setFocus() {
+    if (this.isCodeMirror){
+      this.element.focus();
+    } else {
+      let event = new Event('focus');
+      this.element.dispatchEvent(event);
+    }
+  }
+
   public caretPositionWithDocumentInfo(): object {
     if (this.isCodeMirror){
       return this.caretPositionWithDocumentInfoForCodeMirror();
@@ -25,7 +34,9 @@ export class BoundElement {
 
   // position is for input, textNode is for contenteditable
   public setCaretPosition(position, textNode){
-    if (this.isContenteditable){
+    if (this.isCodeMirror){
+      this.element.doc.setCursor({line: 0, ch: position});
+    } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
       range.setStart(textNode, 0);

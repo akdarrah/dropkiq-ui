@@ -5,6 +5,7 @@ export declare class BoundElement {
     isContenteditable: boolean;
     isCodeMirror: boolean;
     constructor(element: any, window: any, document: any);
+    setFocus(): void;
     caretPositionWithDocumentInfo(): object;
     setCaretPosition(position: any, textNode: any): void;
     getCaretPosition(): {
