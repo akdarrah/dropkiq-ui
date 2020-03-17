@@ -3,6 +3,7 @@ export declare class BoundElement {
     window: any;
     document: any;
     isContenteditable: boolean;
+    isCodeMirror: boolean;
     constructor(element: any, window: any, document: any);
     caretPositionWithDocumentInfo(): object;
     setCaretPosition(position: any, textNode: any): void;
@@ -18,6 +19,7 @@ export declare class BoundElement {
     private insertTextForInput;
     caretPositionWithDocumentInfoForInput(): object;
     caretPositionWithDocumentInfoForContenteditable(): object;
+    caretPositionWithDocumentInfoForCodeMirror(): object;
     private captureRangeText;
     private getTextAreaOrInputUnderlinePosition;
     private getContentEditableCaretPosition;

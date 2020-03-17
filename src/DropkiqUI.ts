@@ -97,7 +97,7 @@ export class DropkiqUI {
     document.body.appendChild(this.$div);
 
     let that = this;
-    this.element.addEventListener('keydown', function(e) {
+    this.element.on('keydown', function(e) {
       that.menuMode = true;
 
       if(!that.suggestionsArray.length){
@@ -148,11 +148,11 @@ export class DropkiqUI {
       }, 25);
     }
 
-    this.element.addEventListener("click", callback);
-    this.element.addEventListener("focus", callback);
+    this.element.on("click", callback);
+    this.element.on("focus", callback);
 
     // Auto-complete {{}} and {%%}
-    this.element.addEventListener("keydown", function(e){
+    this.element.on("keydown", function(e){
       setTimeout(function(){
         let result = that.boundElement.caretPositionWithDocumentInfo();
 
@@ -339,6 +339,9 @@ export class DropkiqUI {
 
   private findResults(){
     let result = this.boundElement.caretPositionWithDocumentInfo();
+
+    console.log(result);
+    return false;
 
     this.caretOffset = this.boundElement.getCaretPosition();
 

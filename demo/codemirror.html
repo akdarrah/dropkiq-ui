@@ -128,6 +128,13 @@
       var editor = CodeMirror.fromTextArea(textarea, {
         lineNumbers: true
       });
+
+      editor.on('change', function(){
+        console.log(editor.getValue());
+      });
+      window.editor = editor;
+
+      new DropkiqUI(editor, schema, context, scope, "");
     </script>    
   </body>
 </html>
