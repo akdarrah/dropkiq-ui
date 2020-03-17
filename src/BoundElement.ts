@@ -35,7 +35,13 @@ export class BoundElement {
   // position is for input, textNode is for contenteditable
   public setCaretPosition(position, textNode){
     if (this.isCodeMirror){
-      this.element.doc.setCursor({line: 0, ch: position});
+      var text       = this.element.getValue();
+      var slicedText = text.slice(0, position);
+      var splitText  = slicedText.split(/\r?\n/);
+      var line       = (splitText.length - 1);
+      var column     = splitText[line].length;
+
+      this.element.doc.setCursor({line: line, ch: column});
     } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
