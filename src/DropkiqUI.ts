@@ -4,6 +4,7 @@ import tippy from 'tippy.js';
 
 export class DropkiqUI {
   public element: any;
+  public isCodeMirror: boolean;
   public boundElement: BoundElement;
   public schema: object;
   public context: object;
@@ -53,6 +54,7 @@ export class DropkiqUI {
     }
 
     this.element = element;
+    this.isCodeMirror = this.element.constructor.name === 'CodeMirror';
     this.boundElement = new BoundElement(this.element, this.window, this.document);
 
     this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey, {suggestionFilter: this.suggestionFilter});
@@ -97,7 +99,7 @@ export class DropkiqUI {
     document.body.appendChild(this.$div);
 
     let that = this;
-    this.element.on('keydown', function(cm, e) {
+    let menuControlCallback = function(e) {
       that.menuMode = true;
 
       if(!that.suggestionsArray.length){
@@ -139,7 +141,7 @@ export class DropkiqUI {
           that.menuMode = false;
           break;
       }
-    });
+    };
 
     let callback = function(){
       if(that.menuMode){ return; }
@@ -148,11 +150,8 @@ export class DropkiqUI {
       }, 25);
     }
 
-    this.element.on("click", callback);
-    this.element.on("focus", callback);
-
     // Auto-complete {{}} and {%%}
-    this.element.on("keydown", function(cm, e){
+    let autoCompleteCallback = function(e){
       setTimeout(function(){
         let result = that.boundElement.caretPositionWithDocumentInfo();
 
@@ -174,7 +173,19 @@ export class DropkiqUI {
       }, 25);
 
       callback();
-    });
+    };
+
+    if(this.isCodeMirror){
+      this.element.on('keydown', function(cm, e){ menuControlCallback(e); });
+      this.element.on("click", callback);
+      this.element.on("focus", callback);
+      this.element.on("keydown", function(cm, e){ autoCompleteCallback(e) });
+    } else {
+      this.element.addEventListener('keydown', menuControlCallback);
+      this.element.addEventListener("click", callback);
+      this.element.addEventListener("focus", callback);
+      this.element.addEventListener("keydown", autoCompleteCallback);
+    }
   }
 
   private renderSuggestions(){

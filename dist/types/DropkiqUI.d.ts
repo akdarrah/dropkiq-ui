@@ -1,6 +1,7 @@
 import { BoundElement } from './BoundElement';
 export declare class DropkiqUI {
     element: any;
+    isCodeMirror: boolean;
     boundElement: BoundElement;
     schema: object;
     context: object;
