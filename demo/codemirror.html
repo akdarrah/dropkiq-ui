@@ -76,7 +76,7 @@
           }
         }
       };
-    
+
       // Describes what data the user has access to right now (required)
       var context = {
         email_subject: {
@@ -100,7 +100,7 @@
           hint: "The contact who will receive the email"
         }
       };
-    
+
       // Test data that is used for the preview feature (optional)
       var scope = {
         email_subject: "Try Dropkiq Today!",
@@ -128,9 +128,7 @@
       var editor = CodeMirror.fromTextArea(textarea, {
         lineNumbers: true
       });
-
-      window.editor = editor;
       new DropkiqUI(editor, schema, context, scope, "");
-    </script>    
+    </script>
   </body>
 </html>
