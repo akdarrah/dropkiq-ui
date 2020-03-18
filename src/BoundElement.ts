@@ -3,16 +3,29 @@ export class BoundElement {
   public window: any;
   public document: any;
   public isContenteditable: boolean;
+  public isCodeMirror: boolean;
 
   constructor(element, window, document) {
     this.element = element;
     this.window = window;
     this.document = document;
     this.isContenteditable = this.element.isContentEditable;
+    this.isCodeMirror = this.element.constructor.name === 'CodeMirror';
+  }
+
+  public setFocus() {
+    if (this.isCodeMirror){
+      this.element.focus();
+    } else {
+      let event = new Event('focus');
+      this.element.dispatchEvent(event);
+    }
   }
 
   public caretPositionWithDocumentInfo(): object {
-    if (this.isContenteditable){
+    if (this.isCodeMirror){
+      return this.caretPositionWithDocumentInfoForCodeMirror();
+    } else if (this.isContenteditable){
       return this.caretPositionWithDocumentInfoForContenteditable();
     } else {
       return this.caretPositionWithDocumentInfoForInput();
@@ -21,7 +34,15 @@ export class BoundElement {
 
   // position is for input, textNode is for contenteditable
   public setCaretPosition(position, textNode){
-    if (this.isContenteditable){
+    if (this.isCodeMirror){
+      var text       = this.element.getValue();
+      var slicedText = text.slice(0, position);
+      var splitText  = slicedText.split(/\r?\n/);
+      var line       = (splitText.length - 1);
+      var column     = splitText[line].length;
+
+      this.element.doc.setCursor({line: line, ch: column});
+    } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
       range.setStart(textNode, 0);
@@ -34,7 +55,17 @@ export class BoundElement {
   }
 
   public getCaretPosition(){
-    if (this.isContenteditable){
+    if (this.isCodeMirror){
+      let coords   = this.element.cursorCoords(true);
+      let lineDiv  = this.element.display.lineDiv;
+      let computed = this.window.getComputedStyle ? getComputedStyle(lineDiv) : lineDiv.currentStyle;
+      let nextLine = (this.element.getCursor(true).line + 1);
+
+      return {
+        top: this.element.heightAtLine(nextLine),
+        left: coords.left + parseInt(computed.borderLeftWidth)
+      }
+    } else if (this.isContenteditable){
       let selection = this.window.getSelection();
       let range = selection.getRangeAt(0);
       return this.getContentEditableCaretPosition(range.startOffset);
@@ -45,7 +76,10 @@ export class BoundElement {
   }
 
   public insertTextAtCaret(text){
-    if (this.isContenteditable){
+    if (this.isCodeMirror){
+      let coords = this.element.getCursor(true);
+      this.element.doc.replaceRange(text, coords, coords);
+    } else if (this.isContenteditable){
       return this.insertTextForContenteditable(text)
     } else {
       return this.insertTextForInput(text)
@@ -115,6 +149,36 @@ export class BoundElement {
     rightRange.selectNodeContents(this.element);
     rightRange.setStart(range.startContainer, range.startOffset);
     let rightText = this.captureRangeText(rightRange);
+
+    return {
+      leftText: leftText,
+      selectionStart: leftText.length,
+      rightText: rightText,
+      allText: (leftText + rightText)
+    }
+  }
+
+  public caretPositionWithDocumentInfoForCodeMirror(): object {
+    let value          = this.element.getValue();
+    let cursor         = this.element.getCursor(true);
+    let row            = cursor.line;
+    let column         = cursor.ch;
+    let leftTextArray  = [];
+    let rightTextArray = [];
+
+    value.split(/\r?\n/).forEach(function(text, index){
+      if(index < row){
+        leftTextArray.push(text);
+      } else if (index === row){
+        leftTextArray.push(text.slice(0, column));
+        rightTextArray.push(text.slice(column, text.length));
+      } else if (index > row){
+        rightTextArray.push(text);
+      }
+    });
+
+    let leftText = leftTextArray.join("\n");
+    let rightText = rightTextArray.join("\n");
 
     return {
       leftText: leftText,

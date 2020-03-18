@@ -35,6 +35,7 @@
     "@types/node": "^12.12.25",
     "babel-jest": "^24.9.0",
     "browserify": "^16.5.0",
+    "codemirror": "^5.52.0",
     "froala-editor": "^3.1.1",
     "gulp": "^4.0.2",
     "gulp-import-css": "^0.1.3",
