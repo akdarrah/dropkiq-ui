@@ -54,7 +54,7 @@ export class DropkiqUI {
     }
 
     this.element = element;
-    this.isCodeMirror = this.element.constructor.name === 'CodeMirror';
+    this.isCodeMirror = typeof(this.element['doc']) === 'object';
     this.boundElement = new BoundElement(this.element, this.window, this.document);
 
     this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey, {suggestionFilter: this.suggestionFilter});

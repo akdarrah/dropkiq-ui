@@ -10,7 +10,7 @@ export class BoundElement {
     this.window = window;
     this.document = document;
     this.isContenteditable = this.element.isContentEditable;
-    this.isCodeMirror = this.element.constructor.name === 'CodeMirror';
+    this.isCodeMirror = typeof(this.element['doc']) === 'object';
   }
 
   public setFocus() {
