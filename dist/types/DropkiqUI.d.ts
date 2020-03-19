@@ -27,11 +27,11 @@ export declare class DropkiqUI {
     private $poweredByDropkiq;
     private $paywall;
     constructor(element: any, schema: object, context: object, scope: object, licenseKey?: string, options?: object);
+    closeMenu(): void;
     private renderSuggestions;
     private findResults;
     private insertSuggestion;
     private scrollToNext;
     private scrollToPrevious;
-    private closeMenu;
     private suggestionTitleText;
 }

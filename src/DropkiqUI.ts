@@ -188,6 +188,11 @@ export class DropkiqUI {
     }
   }
 
+  public closeMenu(){
+    this.suggestionsArray = [];
+    this.renderSuggestions();
+  }
+
   private renderSuggestions(){
     let prefix = this.result['prefix'];
 
@@ -428,11 +433,6 @@ export class DropkiqUI {
       this.suggestionsArray[this.suggestionsArray.length-1]['active'] = true;
     }
 
-    this.renderSuggestions();
-  }
-
-  private closeMenu(){
-    this.suggestionsArray = [];
     this.renderSuggestions();
   }
 
