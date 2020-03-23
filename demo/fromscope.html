@@ -2,34 +2,13 @@
 <head>
   <link rel="stylesheet" type="text/css" href="../dist/dropkiq.css">
   <script src="../dist/dropkiq.min.js"></script>
-  <style>
-    .contenteditable-input {
-      outline: none;
-      border: 1px solid #eee;
-      padding: 3px 5px;
-      border-radius: 2px;
-      font-size: 15px;
-      min-height: 32px;
-      cursor: text;
-    }
-    .contenteditable-input:focus {
-      border-color: #d1d1d1;
-      background-color: #fbfbfb;
-    }
-    [contenteditable="true"]:empty:before {
-      content: attr(placeholder);
-      display: block;
-      color: #ccc;
-    }
-  </style>
 </head>
 <html>
   <body>
     <h1>DropkiqUI</h1>
     <p>This demo is for testing purposes.</p>
     <form>
-      <!-- <textarea rows="8" cols="60" id="dropkiq-example"></textarea> -->
-      <div contenteditable=true class="contenteditable-input" id="dropkiq-example"></div>
+      <textarea rows="8" cols="60" id="dropkiq-example"></textarea>
     </form>
 
     <script>
