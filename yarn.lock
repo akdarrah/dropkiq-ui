@@ -2075,14 +2075,15 @@ domexception@^2.0.1:
   dependencies:
     webidl-conversions "^5.0.0"
 
-dropkiq@^1.0.44:
-  version "1.0.44"
-  resolved "https://registry.yarnpkg.com/dropkiq/-/dropkiq-1.0.44.tgz#0db9174b7a3d3b33446fafdf815f2e07954e6f03"
-  integrity sha512-MwL8VOXLwmXBGSL1USrHNT1aqjX+2ohuKDC5YcOa8Bq7Fpnyrf5wsHTLaadSADk/hbCAUBgLZQnaTl326a4qLg==
+dropkiq@^1.0.45:
+  version "1.0.45"
+  resolved "https://registry.yarnpkg.com/dropkiq/-/dropkiq-1.0.45.tgz#41a4012e21c7d5d1c622ebac6ef4b87aa3416c69"
+  integrity sha512-YuAEjoJZ5dwvxMx1+N5xNOlTS71yp6Vn+uwdjh0uPsW6WzyRYISSnr1W+XwMGHXM3AlGqMDcjGvNfABZs7d39w==
   dependencies:
     axios "^0.18.1"
     js-yaml "^3.0.0"
     tslib "^1.6.1"
+    uuid "^7.0.2"
 
 duplexer2@0.0.2:
   version "0.0.2"
@@ -7594,6 +7595,11 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.2.tgz#7ff5c203467e91f5e0d85cfcbaaf7d2ebbca9be6"
+  integrity sha512-vy9V/+pKG+5ZTYKf+VcphF5Oc6EFiu3W8Nv3P3zIh0EqVI80ZxOzuPfe9EHjkFNvf8+xuTHVeei4Drydlx4zjw==
 
 v8flags@^3.0.1:
   version "3.1.3"
