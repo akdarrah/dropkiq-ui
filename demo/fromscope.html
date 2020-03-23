@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" type="text/css" href="../dist/dropkiq.css">
+  <script src="../dist/dropkiq.min.js"></script>
+</head>
+<html>
+  <body>
+    <h1>DropkiqUI</h1>
+    <p>This demo is for testing purposes.</p>
+    <form>
+      <textarea rows="8" cols="60" id="dropkiq-example"></textarea>
+    </form>
+
+    <script>
+      // Test data that is used for the preview feature (optional)
+      var scope = {
+        email_subject: "Try Dropkiq Today!",
+        email_body: "Work faster with a smarter editor. Write complex Liquid statements with ease. Dropkiq Autocompletion gives your users the confidence they need to write their statements correctly the first time.",
+        email_from: "Adam Darrah <adam@dropkiq.com>",
+        email_contact: {
+          name: "John Doe",
+          email: "john.doe@dropkiq.com",
+          age: 30,
+          is_minor: false,
+          birthdate: Date.parse("March 18, 1990"),
+          notes: "Software developer for application that uses liquid, but users don't fully understand how to use it...",
+          favorite_website: {
+            nickname: "Dropkiq",
+            url: "https://www.dropkiq.com/"
+          },
+          visited_websites: [
+            {nickname: "Dropkiq Ruby Gem", url: "https://github.com/akdarrah/dropkiq-gem"},
+            {nickname: "Dropkiq UI", url: "https://github.com/akdarrah/dropkiq-ui"}
+          ]
+        }
+      };
+
+      // Initialize the Standard DropkiqUI for demo elements
+      // https://www.npmjs.com/package/dropkiq-ui
+      new DropkiqUIFromScope(document.getElementById('dropkiq-example'), scope, "").dropkiqUI();
+    </script>
+  </body>
+</html>
