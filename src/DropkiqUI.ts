@@ -140,7 +140,9 @@ export class DropkiqUI {
       }
     };
 
-    let callback = function(){
+    let callback = function(e){
+      e.stopImmediatePropagation();
+
       setTimeout(function(){
         that.findResults.apply(that);
       }, 25);
@@ -148,6 +150,8 @@ export class DropkiqUI {
 
     // Auto-complete {{}} and {%%}
     let autoCompleteCallback = function(e){
+      e.stopImmediatePropagation();
+
       setTimeout(function(){
         let result = that.boundElement.caretPositionWithDocumentInfo();
 
@@ -168,7 +172,7 @@ export class DropkiqUI {
         }
       }, 25);
 
-      callback();
+      callback(e);
     };
 
     if(this.isCodeMirror){
