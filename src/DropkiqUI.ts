@@ -140,7 +140,7 @@ export class DropkiqUI {
       }
     };
 
-    let callback = function(e){
+    let findResultsCallback = function(e){
       e.stopImmediatePropagation();
 
       setTimeout(function(){
@@ -172,18 +172,18 @@ export class DropkiqUI {
         }
       }, 25);
 
-      callback(e);
+      findResultsCallback(e);
     };
 
     if(this.isCodeMirror){
       this.element.on('keydown', function(cm, e){ menuControlCallback(e); });
-      this.element.on("mousedown", function(cm, e){ callback(e); });
-      this.element.on("focus", function(cm, e){ callback(e); });
+      this.element.on("mousedown", function(cm, e){ findResultsCallback(e); });
+      this.element.on("focus", function(cm, e){ findResultsCallback(e); });
       this.element.on("keydown", function(cm, e){ autoCompleteCallback(e) });
     } else {
       this.element.addEventListener('keydown', menuControlCallback);
-      this.element.addEventListener("click", callback);
-      this.element.addEventListener("focus", callback);
+      this.element.addEventListener("click", findResultsCallback);
+      this.element.addEventListener("focus", findResultsCallback);
       this.element.addEventListener("keydown", autoCompleteCallback);
     }
   }
