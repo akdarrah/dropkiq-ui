@@ -97,56 +97,6 @@ export class DropkiqUI {
     document.body.appendChild(this.$div);
 
     let that = this;
-    let menuControlCallback = function(e) {
-      if(!that.suggestionsArray.length){
-        return true;
-      }
-
-      let suggestion;
-      switch (e.keyCode) {
-        case 27: // Esc key
-          that.closeMenu();
-          e.stopImmediatePropagation();
-          e.preventDefault();
-          break;
-        case 38: // up arrow
-          that.scrollToPrevious();
-          e.stopImmediatePropagation();
-          e.preventDefault();
-          break;
-        case 40: // down arrow
-          that.scrollToNext();
-          e.stopImmediatePropagation();
-          e.preventDefault();
-          break;
-        case 9: // tab
-          suggestion = that.suggestionsArray.find(function(suggestion){
-            return suggestion['active'];
-          });
-          that.insertSuggestion(suggestion);
-          e.stopImmediatePropagation();
-          e.preventDefault();
-          break;
-        case 13: // enter key
-          suggestion = that.suggestionsArray.find(function(suggestion){
-            return suggestion['active'];
-          });
-          that.insertSuggestion(suggestion);
-          e.stopImmediatePropagation();
-          e.preventDefault();
-          break;
-        default:
-          break;
-      }
-    };
-
-    let findResultsCallback = function(e){
-      e.stopImmediatePropagation();
-
-      setTimeout(function(){
-        that.findResults.apply(that);
-      }, 25);
-    }
 
     // Auto-complete {{}} and {%%}
     let autoCompleteCallback = function(e){
@@ -175,16 +125,66 @@ export class DropkiqUI {
       findResultsCallback(e);
     };
 
+    let menuControlCallback = function(e) {
+      if(that.suggestionsArray.length){
+        let suggestion;
+
+        switch (e.keyCode) {
+          case 27: // Esc key
+            that.closeMenu();
+            e.preventDefault();
+            return false;
+            break;
+          case 38: // up arrow
+            that.scrollToPrevious();
+            e.preventDefault();
+            return false;
+            break;
+          case 40: // down arrow
+            that.scrollToNext();
+            e.preventDefault();
+            return false;
+            break;
+          case 9: // tab
+            suggestion = that.suggestionsArray.find(function(suggestion){
+              return suggestion['active'];
+            });
+            that.insertSuggestion(suggestion);
+            e.preventDefault();
+            return false;
+            break;
+          case 13: // enter key
+            suggestion = that.suggestionsArray.find(function(suggestion){
+              return suggestion['active'];
+            });
+            that.insertSuggestion(suggestion);
+            e.preventDefault();
+            return false;
+            break;
+          default:
+            break;
+        }
+      }
+
+      autoCompleteCallback(e);
+    };
+
+    let findResultsCallback = function(e){
+      e.stopImmediatePropagation();
+
+      setTimeout(function(){
+        that.findResults.apply(that);
+      }, 25);
+    }
+
     if(this.isCodeMirror){
       this.element.on('keydown', function(cm, e){ menuControlCallback(e); });
       this.element.on("mousedown", function(cm, e){ findResultsCallback(e); });
       this.element.on("focus", function(cm, e){ findResultsCallback(e); });
-      this.element.on("keydown", function(cm, e){ autoCompleteCallback(e) });
     } else {
       this.element.addEventListener('keydown', menuControlCallback);
       this.element.addEventListener("click", findResultsCallback);
       this.element.addEventListener("focus", findResultsCallback);
-      this.element.addEventListener("keydown", autoCompleteCallback);
     }
   }
 
@@ -396,9 +396,12 @@ export class DropkiqUI {
     }
 
     this.boundElement.insertTextAtCaret(textToEnter);
-    this.boundElement.setFocus();
-
     this.closeMenu();
+
+    let that = this;
+    setTimeout(function(){
+      that.findResults.apply(that);
+    }, 25);
   };
 
   private scrollToNext(){
