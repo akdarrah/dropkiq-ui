@@ -396,6 +396,7 @@ export class DropkiqUI {
     }
 
     this.boundElement.insertTextAtCaret(textToEnter);
+    this.boundElement.setFocus();
     this.closeMenu();
 
     let that = this;
