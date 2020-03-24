@@ -30,6 +30,7 @@ export class DropkiqUI {
   private $div: any;
   private $poweredByDropkiq: any;
   private $paywall: any;
+  private documentCallback: any;
 
   constructor(element, schema: object, context: object, scope: object, licenseKey: string = "", options: object = {}) {
     this.schema = schema;
@@ -97,6 +98,10 @@ export class DropkiqUI {
     document.body.appendChild(this.$div);
 
     let that = this;
+
+    that.documentCallback = function(){
+      that.closeMenu();
+    }
 
     // Auto-complete {{}} and {%%}
     let autoCompleteCallback = function(e){
@@ -189,6 +194,11 @@ export class DropkiqUI {
   }
 
   public closeMenu(){
+    document.removeEventListener('click', this.documentCallback);
+    if(this.document && this.document !== document){
+      this.document.removeEventListener('click', this.documentCallback);
+    }
+
     this.suggestionsArray = [];
     this.renderSuggestions();
   }
@@ -336,18 +346,12 @@ export class DropkiqUI {
       this.$paywall.appendChild(purchaseLinkP);
     }
 
-    let closeMenuAndStopListening = function(){
-      that.closeMenu();
+    document.removeEventListener('click', that.documentCallback);
+    document.addEventListener('click', that.documentCallback);
 
-      document.removeEventListener('click', closeMenuAndStopListening);
-      if(that.document !== document){
-        that.document.removeEventListener('click', closeMenuAndStopListening);
-      }
-    }
-
-    document.addEventListener('click', closeMenuAndStopListening);
-    if(this.document !== document){
-      this.document.addEventListener('click', closeMenuAndStopListening);
+    if(that.document && that.document !== document){
+      that.document.removeEventListener('click', that.documentCallback);
+      that.document.addEventListener('click', that.documentCallback);
     }
 
     tippy('.hint-icon');

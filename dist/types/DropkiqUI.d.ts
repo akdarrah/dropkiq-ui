@@ -25,6 +25,7 @@ export declare class DropkiqUI {
     private $div;
     private $poweredByDropkiq;
     private $paywall;
+    private documentCallback;
     constructor(element: any, schema: object, context: object, scope: object, licenseKey?: string, options?: object);
     closeMenu(): void;
     private renderSuggestions;
