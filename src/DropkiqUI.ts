@@ -16,7 +16,6 @@ export class DropkiqUI {
   public showHints: Function;
   public suggestionFilter: Function;
   public onRender: Function;
-  public menuMode: boolean;
   public iframe: any;
   public document: any;
   public window: any;
@@ -62,7 +61,6 @@ export class DropkiqUI {
     this.result = {};
     this.caretOffset = {};
     this.pathSchema = [];
-    this.menuMode = false;
 
     this.$poweredByDropkiq = document.createElement("div");
     this.$poweredByDropkiq.style.display = "none";
@@ -100,10 +98,7 @@ export class DropkiqUI {
 
     let that = this;
     let menuControlCallback = function(e) {
-      that.menuMode = true;
-
       if(!that.suggestionsArray.length){
-        that.menuMode = false;
         return true;
       }
 
@@ -111,14 +106,17 @@ export class DropkiqUI {
       switch (e.keyCode) {
         case 27: // Esc key
           that.closeMenu();
+          e.stopImmediatePropagation();
           e.preventDefault();
           break;
         case 38: // up arrow
           that.scrollToPrevious();
+          e.stopImmediatePropagation();
           e.preventDefault();
           break;
         case 40: // down arrow
           that.scrollToNext();
+          e.stopImmediatePropagation();
           e.preventDefault();
           break;
         case 9: // tab
@@ -126,7 +124,7 @@ export class DropkiqUI {
             return suggestion['active'];
           });
           that.insertSuggestion(suggestion);
-          that.menuMode = false;
+          e.stopImmediatePropagation();
           e.preventDefault();
           break;
         case 13: // enter key
@@ -134,17 +132,15 @@ export class DropkiqUI {
             return suggestion['active'];
           });
           that.insertSuggestion(suggestion);
-          that.menuMode = false;
+          e.stopImmediatePropagation();
           e.preventDefault();
           break;
         default:
-          that.menuMode = false;
           break;
       }
     };
 
     let callback = function(){
-      if(that.menuMode){ return; }
       setTimeout(function(){
         that.findResults.apply(that);
       }, 25);
@@ -379,7 +375,6 @@ export class DropkiqUI {
     this.suggestionsArray = this.result['suggestionsArray'] || emptyArray;
 
     if(this.suggestionsArray.length > 0){
-      this.menuMode = true;
       this.suggestionsArray[0]['active'] = true;
     }
 

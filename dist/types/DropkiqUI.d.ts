@@ -12,7 +12,6 @@ export declare class DropkiqUI {
     showHints: Function;
     suggestionFilter: Function;
     onRender: Function;
-    menuMode: boolean;
     iframe: any;
     document: any;
     window: any;

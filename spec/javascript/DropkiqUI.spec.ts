@@ -102,7 +102,6 @@ describe('DropkiqUI#constructor', () => {
     expect(dropkiqUI['result']).toStrictEqual({});
     expect(dropkiqUI['caretOffset']).toStrictEqual({});
     expect(dropkiqUI['pathSchema']).toStrictEqual([]);
-    expect(dropkiqUI['menuMode']).toStrictEqual(false);
 
     let dropkiqDiv = document.getElementById('dropkiq-autosuggest-menu');
     expect(dropkiqDiv.innerHTML.length).not.toBe(0);
