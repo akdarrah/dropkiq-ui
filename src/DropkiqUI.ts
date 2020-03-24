@@ -177,8 +177,8 @@ export class DropkiqUI {
 
     if(this.isCodeMirror){
       this.element.on('keydown', function(cm, e){ menuControlCallback(e); });
-      this.element.on("click", callback);
-      this.element.on("focus", callback);
+      this.element.on("mousedown", function(cm, e){ callback(e); });
+      this.element.on("focus", function(cm, e){ callback(e); });
       this.element.on("keydown", function(cm, e){ autoCompleteCallback(e) });
     } else {
       this.element.addEventListener('keydown', menuControlCallback);
