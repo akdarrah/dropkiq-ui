@@ -28,6 +28,7 @@ export declare class DropkiqUI {
     private documentCallback;
     constructor(element: any, schema: object, context: object, scope: object, licenseKey?: string, options?: object);
     closeMenu(): void;
+    private removeDocumentEventListeners;
     private renderSuggestions;
     private findResults;
     private insertSuggestion;

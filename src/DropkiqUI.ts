@@ -188,13 +188,17 @@ export class DropkiqUI {
   }
 
   public closeMenu(){
+    this.removeDocumentEventListeners();
+    this.suggestionsArray = [];
+    this.renderSuggestions();
+  }
+
+  private removeDocumentEventListeners(){
     document.removeEventListener('click', this.documentCallback);
+
     if(this.document && this.document !== document){
       this.document.removeEventListener('click', this.documentCallback);
     }
-
-    this.suggestionsArray = [];
-    this.renderSuggestions();
   }
 
   private renderSuggestions(){
@@ -340,11 +344,9 @@ export class DropkiqUI {
       this.$paywall.appendChild(purchaseLinkP);
     }
 
-    document.removeEventListener('click', that.documentCallback);
+    that.removeDocumentEventListeners();
     document.addEventListener('click', that.documentCallback);
-
     if(that.document && that.document !== document){
-      that.document.removeEventListener('click', that.documentCallback);
       that.document.addEventListener('click', that.documentCallback);
     }
 
