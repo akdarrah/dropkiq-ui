@@ -103,33 +103,6 @@ export class DropkiqUI {
       that.closeMenu();
     }
 
-    // Auto-complete {{}} and {%%}
-    let autoCompleteCallback = function(e){
-      e.stopImmediatePropagation();
-
-      setTimeout(function(){
-        let result = that.boundElement.caretPositionWithDocumentInfo();
-
-        let selectionStart    = result['selectionStart'];
-        let leftText          = result['leftText'];
-        let rightText         = result['rightText'];
-        let leftTwoCharacters = leftText.slice(-2);
-        let closeTagPattern   = /^(\s+)?\}(.+)?/;
-
-        if (e.keyCode == 219 && e.shiftKey && (leftTwoCharacters[1] == "{" || leftTwoCharacters == "{")){
-          let textNode = that.boundElement.insertTextAtCaret("}");
-          that.boundElement.setCaretPosition(selectionStart, textNode);
-          that.element.focus();
-        } else if (e.keyCode == 53 && e.shiftKey && leftTwoCharacters == "{%" && closeTagPattern.test(rightText)){
-          let textNode = that.boundElement.insertTextAtCaret("%");
-          that.boundElement.setCaretPosition(selectionStart, textNode);
-          that.element.focus();
-        }
-      }, 25);
-
-      findResultsCallback(e);
-    };
-
     let keydownCallback = function(e) {
       if(that.suggestionsArray.length){
         let suggestion;
@@ -171,7 +144,28 @@ export class DropkiqUI {
         }
       }
 
-      autoCompleteCallback(e);
+      // Auto-complete {{}} and {%%}
+      setTimeout(function(){
+        let result = that.boundElement.caretPositionWithDocumentInfo();
+
+        let selectionStart    = result['selectionStart'];
+        let leftText          = result['leftText'];
+        let rightText         = result['rightText'];
+        let leftTwoCharacters = leftText.slice(-2);
+        let closeTagPattern   = /^(\s+)?\}(.+)?/;
+
+        if (e.keyCode == 219 && e.shiftKey && (leftTwoCharacters[1] == "{" || leftTwoCharacters == "{")){
+          let textNode = that.boundElement.insertTextAtCaret("}");
+          that.boundElement.setCaretPosition(selectionStart, textNode);
+          that.element.focus();
+        } else if (e.keyCode == 53 && e.shiftKey && leftTwoCharacters == "{%" && closeTagPattern.test(rightText)){
+          let textNode = that.boundElement.insertTextAtCaret("%");
+          that.boundElement.setCaretPosition(selectionStart, textNode);
+          that.element.focus();
+        }
+      }, 25);
+
+      findResultsCallback(e);
     };
 
     let findResultsCallback = function(e){
