@@ -176,14 +176,22 @@ export class DropkiqUI {
       }, 25);
     }
 
+    let onBlurCallback = function(e){
+      let sel   = that.window.getSelection();
+      let range = sel.getRangeAt(0);
+      that.boundElement.setExpiringCachedOnBlurRange(range);
+    }
+
     if(this.isCodeMirror){
       this.element.on('keydown', function(cm, e){ keydownCallback(e); });
       this.element.on("mousedown", function(cm, e){ findResultsCallback(e); });
       this.element.on("focus", function(cm, e){ findResultsCallback(e); });
+      this.element.on("blur", function(em, e){ onBlurCallback(e); });
     } else {
       this.element.addEventListener('keydown', keydownCallback);
       this.element.addEventListener("click", findResultsCallback);
       this.element.addEventListener("focus", findResultsCallback);
+      this.element.addEventListener("blur", onBlurCallback);
     }
   }
 

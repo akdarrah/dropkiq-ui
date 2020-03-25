@@ -4,6 +4,7 @@ export declare class BoundElement {
     document: any;
     isContenteditable: boolean;
     isCodeMirror: boolean;
+    cachedOnBlurRange: any;
     constructor(element: any, window: any, document: any);
     setFocus(): void;
     caretPositionWithDocumentInfo(): object;
@@ -13,6 +14,7 @@ export declare class BoundElement {
         left: any;
     };
     insertTextAtCaret(text: any): any;
+    setExpiringCachedOnBlurRange(range: any): void;
     private insertTextForContenteditable;
     private insertTextForInput;
     caretPositionWithDocumentInfoForInput(): object;
