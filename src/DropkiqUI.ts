@@ -187,6 +187,10 @@ export class DropkiqUI {
     }
   }
 
+  public menuIsOpen(){
+    return (this.suggestionsArray.length > 0);
+  }
+
   public closeMenu(){
     this.removeDocumentEventListeners();
     this.suggestionsArray = [];
