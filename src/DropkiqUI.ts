@@ -345,10 +345,12 @@ export class DropkiqUI {
     }
 
     that.removeDocumentEventListeners();
-    document.addEventListener('click', that.documentCallback);
-    if(that.document && that.document !== document){
-      that.document.addEventListener('click', that.documentCallback);
-    }
+    setTimeout(function(){
+      document.addEventListener('click', that.documentCallback);
+      if(that.document && that.document !== document){
+        that.document.addEventListener('click', that.documentCallback);
+      }
+    }, 100);
 
     tippy('.hint-icon');
   }
