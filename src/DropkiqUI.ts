@@ -130,7 +130,7 @@ export class DropkiqUI {
       findResultsCallback(e);
     };
 
-    let menuControlCallback = function(e) {
+    let keydownCallback = function(e) {
       if(that.suggestionsArray.length){
         let suggestion;
 
@@ -183,11 +183,11 @@ export class DropkiqUI {
     }
 
     if(this.isCodeMirror){
-      this.element.on('keydown', function(cm, e){ menuControlCallback(e); });
+      this.element.on('keydown', function(cm, e){ keydownCallback(e); });
       this.element.on("mousedown", function(cm, e){ findResultsCallback(e); });
       this.element.on("focus", function(cm, e){ findResultsCallback(e); });
     } else {
-      this.element.addEventListener('keydown', menuControlCallback);
+      this.element.addEventListener('keydown', keydownCallback);
       this.element.addEventListener("click", findResultsCallback);
       this.element.addEventListener("focus", findResultsCallback);
     }
