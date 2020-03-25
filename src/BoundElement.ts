@@ -4,6 +4,7 @@ export class BoundElement {
   public document: any;
   public isContenteditable: boolean;
   public isCodeMirror: boolean;
+  public cachedOnBlurRange: any;
 
   constructor(element, window, document) {
     this.element = element;
@@ -11,6 +12,7 @@ export class BoundElement {
     this.document = document;
     this.isContenteditable = this.element.isContentEditable;
     this.isCodeMirror = typeof(this.element['doc']) === 'object';
+    this.cachedOnBlurRange = null;
   }
 
   public setFocus() {
@@ -86,12 +88,31 @@ export class BoundElement {
     }
   }
 
+  public setExpiringCachedOnBlurRange(range: any){
+    let that = this;
+
+    if (this.isContenteditable){
+      this.cachedOnBlurRange = range;
+
+      setTimeout(function(){
+        that.cachedOnBlurRange = null;
+      }, 100);
+    }
+  }
+
   /////////////////////////////////////////////////////////////////////////////
 
   private insertTextForContenteditable(text) {
     var sel, range, html;
     sel = this.window.getSelection();
-    range = sel.getRangeAt(0);
+
+    if(this.cachedOnBlurRange){
+      range = this.cachedOnBlurRange;
+      this.cachedOnBlurRange = null;
+    } else {
+      range = sel.getRangeAt(0);
+    }
+
     range.deleteContents();
     var textNode = this.document.createTextNode(text);
     range.insertNode(textNode);
