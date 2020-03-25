@@ -96,7 +96,7 @@ export class BoundElement {
 
       setTimeout(function(){
         that.cachedOnBlurRange = null;
-      }, 100);
+      }, 200);
     }
   }
 
