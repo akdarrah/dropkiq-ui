@@ -16,7 +16,6 @@ export class DropkiqUI {
   public showHints: Function;
   public suggestionFilter: Function;
   public onRender: Function;
-  public menuMode: boolean;
   public iframe: any;
   public document: any;
   public window: any;
@@ -31,6 +30,7 @@ export class DropkiqUI {
   private $div: any;
   private $poweredByDropkiq: any;
   private $paywall: any;
+  private documentCallback: any;
 
   constructor(element, schema: object, context: object, scope: object, licenseKey: string = "", options: object = {}) {
     this.schema = schema;
@@ -62,7 +62,6 @@ export class DropkiqUI {
     this.result = {};
     this.caretOffset = {};
     this.pathSchema = [];
-    this.menuMode = false;
 
     this.$poweredByDropkiq = document.createElement("div");
     this.$poweredByDropkiq.style.display = "none";
@@ -99,59 +98,53 @@ export class DropkiqUI {
     document.body.appendChild(this.$div);
 
     let that = this;
-    let menuControlCallback = function(e) {
-      that.menuMode = true;
 
-      if(!that.suggestionsArray.length){
-        that.menuMode = false;
-        return true;
-      }
-
-      let suggestion;
-      switch (e.keyCode) {
-        case 27: // Esc key
-          that.closeMenu();
-          e.preventDefault();
-          break;
-        case 38: // up arrow
-          that.scrollToPrevious();
-          e.preventDefault();
-          break;
-        case 40: // down arrow
-          that.scrollToNext();
-          e.preventDefault();
-          break;
-        case 9: // tab
-          suggestion = that.suggestionsArray.find(function(suggestion){
-            return suggestion['active'];
-          });
-          that.insertSuggestion(suggestion);
-          that.menuMode = false;
-          e.preventDefault();
-          break;
-        case 13: // enter key
-          suggestion = that.suggestionsArray.find(function(suggestion){
-            return suggestion['active'];
-          });
-          that.insertSuggestion(suggestion);
-          that.menuMode = false;
-          e.preventDefault();
-          break;
-        default:
-          that.menuMode = false;
-          break;
-      }
-    };
-
-    let callback = function(){
-      if(that.menuMode){ return; }
-      setTimeout(function(){
-        that.findResults.apply(that);
-      }, 25);
+    that.documentCallback = function(){
+      that.closeMenu();
     }
 
-    // Auto-complete {{}} and {%%}
-    let autoCompleteCallback = function(e){
+    let keydownCallback = function(e) {
+      if(that.suggestionsArray.length){
+        let suggestion;
+
+        switch (e.keyCode) {
+          case 27: // Esc key
+            that.closeMenu();
+            e.preventDefault();
+            return false;
+            break;
+          case 38: // up arrow
+            that.scrollToPrevious();
+            e.preventDefault();
+            return false;
+            break;
+          case 40: // down arrow
+            that.scrollToNext();
+            e.preventDefault();
+            return false;
+            break;
+          case 9: // tab
+            suggestion = that.suggestionsArray.find(function(suggestion){
+              return suggestion['active'];
+            });
+            that.insertSuggestion(suggestion);
+            e.preventDefault();
+            return false;
+            break;
+          case 13: // enter key
+            suggestion = that.suggestionsArray.find(function(suggestion){
+              return suggestion['active'];
+            });
+            that.insertSuggestion(suggestion);
+            e.preventDefault();
+            return false;
+            break;
+          default:
+            break;
+        }
+      }
+
+      // Auto-complete {{}} and {%%}
       setTimeout(function(){
         let result = that.boundElement.caretPositionWithDocumentInfo();
 
@@ -172,25 +165,44 @@ export class DropkiqUI {
         }
       }, 25);
 
-      callback();
+      findResultsCallback(e);
     };
 
+    let findResultsCallback = function(e){
+      e.stopImmediatePropagation();
+
+      setTimeout(function(){
+        that.findResults.apply(that);
+      }, 25);
+    }
+
     if(this.isCodeMirror){
-      this.element.on('keydown', function(cm, e){ menuControlCallback(e); });
-      this.element.on("click", callback);
-      this.element.on("focus", callback);
-      this.element.on("keydown", function(cm, e){ autoCompleteCallback(e) });
+      this.element.on('keydown', function(cm, e){ keydownCallback(e); });
+      this.element.on("mousedown", function(cm, e){ findResultsCallback(e); });
+      this.element.on("focus", function(cm, e){ findResultsCallback(e); });
     } else {
-      this.element.addEventListener('keydown', menuControlCallback);
-      this.element.addEventListener("click", callback);
-      this.element.addEventListener("focus", callback);
-      this.element.addEventListener("keydown", autoCompleteCallback);
+      this.element.addEventListener('keydown', keydownCallback);
+      this.element.addEventListener("click", findResultsCallback);
+      this.element.addEventListener("focus", findResultsCallback);
     }
   }
 
+  public menuIsOpen(){
+    return (this.suggestionsArray.length > 0);
+  }
+
   public closeMenu(){
+    this.removeDocumentEventListeners();
     this.suggestionsArray = [];
     this.renderSuggestions();
+  }
+
+  private removeDocumentEventListeners(){
+    document.removeEventListener('click', this.documentCallback);
+
+    if(this.document && this.document !== document){
+      this.document.removeEventListener('click', this.documentCallback);
+    }
   }
 
   private renderSuggestions(){
@@ -336,19 +348,13 @@ export class DropkiqUI {
       this.$paywall.appendChild(purchaseLinkP);
     }
 
-    let closeMenuAndStopListening = function(){
-      that.closeMenu();
-
-      document.removeEventListener('click', closeMenuAndStopListening);
-      if(that.document !== document){
-        that.document.removeEventListener('click', closeMenuAndStopListening);
+    that.removeDocumentEventListeners();
+    setTimeout(function(){
+      document.addEventListener('click', that.documentCallback);
+      if(that.document && that.document !== document){
+        that.document.addEventListener('click', that.documentCallback);
       }
-    }
-
-    document.addEventListener('click', closeMenuAndStopListening);
-    if(this.document !== document){
-      this.document.addEventListener('click', closeMenuAndStopListening);
-    }
+    }, 100);
 
     tippy('.hint-icon');
   }
@@ -379,7 +385,6 @@ export class DropkiqUI {
     this.suggestionsArray = this.result['suggestionsArray'] || emptyArray;
 
     if(this.suggestionsArray.length > 0){
-      this.menuMode = true;
       this.suggestionsArray[0]['active'] = true;
     }
 
@@ -398,8 +403,12 @@ export class DropkiqUI {
 
     this.boundElement.insertTextAtCaret(textToEnter);
     this.boundElement.setFocus();
-
     this.closeMenu();
+
+    let that = this;
+    setTimeout(function(){
+      that.findResults.apply(that);
+    }, 25);
   };
 
   private scrollToNext(){

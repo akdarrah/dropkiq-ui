@@ -12,7 +12,6 @@ export declare class DropkiqUI {
     showHints: Function;
     suggestionFilter: Function;
     onRender: Function;
-    menuMode: boolean;
     iframe: any;
     document: any;
     window: any;
@@ -26,8 +25,11 @@ export declare class DropkiqUI {
     private $div;
     private $poweredByDropkiq;
     private $paywall;
+    private documentCallback;
     constructor(element: any, schema: object, context: object, scope: object, licenseKey?: string, options?: object);
+    menuIsOpen(): boolean;
     closeMenu(): void;
+    private removeDocumentEventListeners;
     private renderSuggestions;
     private findResults;
     private insertSuggestion;

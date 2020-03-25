@@ -136,7 +136,7 @@
             var dropkiqUI = new DropkiqUI(editor.el, schema, context, scope, "", {iframe: iframe});
 
             editor.events.on('keydown', function(e) {
-              if (e.which == FroalaEditor.KEYCODE.ENTER && dropkiqUI.menuMode) {
+              if (e.which == FroalaEditor.KEYCODE.ENTER && dropkiqUI.menuIsOpen()) {
                 return false;
               }
             }, true);
