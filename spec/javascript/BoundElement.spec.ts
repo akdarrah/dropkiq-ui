@@ -121,3 +121,54 @@ describe('BoundElement#getRowAndColumnForPosition', () => {
     expect(result.column).toBe(2);
   });
 })
+
+
+describe('BoundElement#caretPositionWithDocumentInfoForValueRowAndColumn', () => {
+  it('works in the most basic example', () => {
+    let element = document.getElementById('dropkiq-example');
+    let boundElement = new BoundElement(element, window, document);
+
+    let text   = "Testingggg";
+    let row    = 0;
+    let column = 0;
+
+    let result = boundElement['caretPositionWithDocumentInfoForValueRowAndColumn'](text, row, column);
+
+    expect(result['leftText']).toBe("");
+    expect(result['selectionStart']).toBe(0);
+    expect(result['rightText']).toBe(text);
+    expect(result['allText']).toBe(text);
+  });
+
+  it('works in a different position within the first line', () => {
+    let element = document.getElementById('dropkiq-example');
+    let boundElement = new BoundElement(element, window, document);
+
+    let text   = "Testingggg";
+    let row    = 0;
+    let column = 5;
+
+    let result = boundElement['caretPositionWithDocumentInfoForValueRowAndColumn'](text, row, column);
+
+    expect(result['leftText']).toBe("Testi");
+    expect(result['selectionStart']).toBe(5);
+    expect(result['rightText']).toBe("ngggg");
+    expect(result['allText']).toBe(text);
+  });
+
+  it('works when there are multiple lines', () => {
+    let element = document.getElementById('dropkiq-example');
+    let boundElement = new BoundElement(element, window, document);
+
+    let text   = "Testingggg\nAgain";
+    let row    = 1;
+    let column = 1;
+
+    let result = boundElement['caretPositionWithDocumentInfoForValueRowAndColumn'](text, row, column);
+
+    expect(result['leftText']).toBe("Testingggg\nA");
+    expect(result['selectionStart']).toBe(12);
+    expect(result['rightText']).toBe("gain");
+    expect(result['allText']).toBe(text);
+  });
+})
