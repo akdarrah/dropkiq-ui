@@ -4,6 +4,7 @@ export class BoundElement {
   public document: any;
   public isContenteditable: boolean;
   public isCodeMirror: boolean;
+  public isAceEditor: boolean;
   public cachedOnBlurRange: any;
 
   constructor(element, window, document) {
@@ -12,6 +13,7 @@ export class BoundElement {
     this.document = document;
     this.isContenteditable = this.element.isContentEditable;
     this.isCodeMirror = typeof(this.element['doc']) === 'object';
+    this.isAceEditor  = typeof(this.element['renderer']) === 'object';
     this.cachedOnBlurRange = null;
   }
 
@@ -27,6 +29,8 @@ export class BoundElement {
   public caretPositionWithDocumentInfo(): object {
     if (this.isCodeMirror){
       return this.caretPositionWithDocumentInfoForCodeMirror();
+    } else if (this.isAceEditor){
+      return this.caretPositionWithDocumentInfoForAceEditor();
     } else if (this.isContenteditable){
       return this.caretPositionWithDocumentInfoForContenteditable();
     } else {
@@ -66,6 +70,13 @@ export class BoundElement {
       return {
         top: this.element.heightAtLine(nextLine),
         left: coords.left + parseInt(computed.borderLeftWidth)
+      }
+    } else if (this.isAceEditor) {
+      let cursorRect = this.element.renderer.$cursorLayer.element.getElementsByClassName("ace_cursor")[0].getBoundingClientRect();
+
+      return {
+        top: cursorRect.top + cursorRect.height,
+        left: cursorRect.left
       }
     } else if (this.isContenteditable){
       let selection = this.window.getSelection();
@@ -179,11 +190,25 @@ export class BoundElement {
     }
   }
 
+  public caretPositionWithDocumentInfoForAceEditor(): object {
+    let value  = this.element.getValue();
+    let cursor = this.element.getCursorPosition()
+    let row    = cursor.row;
+    let column = cursor.column;
+
+    return this.caretPositionWithDocumentInfoForValueRowAndColumn(value, row, column);
+  }
+
   public caretPositionWithDocumentInfoForCodeMirror(): object {
     let value          = this.element.getValue();
     let cursor         = this.element.getCursor(true);
     let row            = cursor.line;
     let column         = cursor.ch;
+
+    return this.caretPositionWithDocumentInfoForValueRowAndColumn(value, row, column);
+  }
+
+  private caretPositionWithDocumentInfoForValueRowAndColumn(value, row, column): object {
     let leftTextArray  = [];
     let rightTextArray = [];
 

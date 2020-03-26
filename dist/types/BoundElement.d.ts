@@ -4,6 +4,7 @@ export declare class BoundElement {
     document: any;
     isContenteditable: boolean;
     isCodeMirror: boolean;
+    isAceEditor: boolean;
     cachedOnBlurRange: any;
     constructor(element: any, window: any, document: any);
     setFocus(): void;
@@ -19,7 +20,9 @@ export declare class BoundElement {
     private insertTextForInput;
     caretPositionWithDocumentInfoForInput(): object;
     caretPositionWithDocumentInfoForContenteditable(): object;
+    caretPositionWithDocumentInfoForAceEditor(): object;
     caretPositionWithDocumentInfoForCodeMirror(): object;
+    private caretPositionWithDocumentInfoForValueRowAndColumn;
     private captureRangeText;
     private getTextAreaOrInputUnderlinePosition;
     private getContentEditableCaretPosition;
