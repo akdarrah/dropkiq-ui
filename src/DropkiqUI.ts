@@ -5,6 +5,7 @@ import tippy from 'tippy.js';
 export class DropkiqUI {
   public element: any;
   public isCodeMirror: boolean;
+  public isAceEditor: boolean;
   public boundElement: BoundElement;
   public schema: object;
   public context: object;
@@ -55,6 +56,7 @@ export class DropkiqUI {
 
     this.element = element;
     this.isCodeMirror = typeof(this.element['doc']) === 'object';
+    this.isAceEditor  = typeof(this.element['renderer']) === 'object';
     this.boundElement = new BoundElement(this.element, this.window, this.document);
 
     this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey, {suggestionFilter: this.suggestionFilter});
@@ -169,7 +171,9 @@ export class DropkiqUI {
     };
 
     let findResultsCallback = function(e){
-      e.stopImmediatePropagation();
+      if(typeof(e.stopImmediatePropagation) === 'function'){
+        e.stopImmediatePropagation();
+      }
 
       setTimeout(function(){
         that.findResults.apply(that);
@@ -187,6 +191,13 @@ export class DropkiqUI {
       this.element.on("mousedown", function(cm, e){ findResultsCallback(e); });
       this.element.on("focus", function(cm, e){ findResultsCallback(e); });
       this.element.on("blur", function(em, e){ onBlurCallback(e); });
+    } else if(this.isAceEditor){
+      this.element.textInput.getElement()
+        .addEventListener('keydown', keydownCallback);
+
+      this.element.on("click", findResultsCallback);
+      this.element.on("focus", findResultsCallback);
+      this.element.on("blur", onBlurCallback);
     } else {
       this.element.addEventListener('keydown', keydownCallback);
       this.element.addEventListener("click", findResultsCallback);

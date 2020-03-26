@@ -4,6 +4,7 @@ export class BoundElement {
   public document: any;
   public isContenteditable: boolean;
   public isCodeMirror: boolean;
+  public isAceEditor: boolean;
   public cachedOnBlurRange: any;
 
   constructor(element, window, document) {
@@ -12,11 +13,14 @@ export class BoundElement {
     this.document = document;
     this.isContenteditable = this.element.isContentEditable;
     this.isCodeMirror = typeof(this.element['doc']) === 'object';
+    this.isAceEditor  = typeof(this.element['renderer']) === 'object';
     this.cachedOnBlurRange = null;
   }
 
   public setFocus() {
     if (this.isCodeMirror){
+      this.element.focus();
+    } else if (this.isAceEditor) {
       this.element.focus();
     } else {
       let event = new Event('focus');
@@ -27,6 +31,8 @@ export class BoundElement {
   public caretPositionWithDocumentInfo(): object {
     if (this.isCodeMirror){
       return this.caretPositionWithDocumentInfoForCodeMirror();
+    } else if (this.isAceEditor){
+      return this.caretPositionWithDocumentInfoForAceEditor();
     } else if (this.isContenteditable){
       return this.caretPositionWithDocumentInfoForContenteditable();
     } else {
@@ -37,13 +43,15 @@ export class BoundElement {
   // position is for input, textNode is for contenteditable
   public setCaretPosition(position, textNode){
     if (this.isCodeMirror){
-      var text       = this.element.getValue();
-      var slicedText = text.slice(0, position);
-      var splitText  = slicedText.split(/\r?\n/);
-      var line       = (splitText.length - 1);
-      var column     = splitText[line].length;
+      var text = this.element.getValue();
+      var rowAndColumn = this.getRowAndColumnForPosition(text, position);
 
-      this.element.doc.setCursor({line: line, ch: column});
+      this.element.doc.setCursor({line: rowAndColumn.row, ch: rowAndColumn.column});
+    } else if (this.isAceEditor) {
+      var text = this.element.getValue();
+      var rowAndColumn = this.getRowAndColumnForPosition(text, position);
+
+      this.element.moveCursorTo(rowAndColumn.row, rowAndColumn.column);
     } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
@@ -53,6 +61,18 @@ export class BoundElement {
       sel.addRange(range);
     } else {
       this.element.setSelectionRange(position, position);
+    }
+  }
+
+  private getRowAndColumnForPosition(text, position) {
+    var slicedText = text.slice(0, position);
+    var splitText  = slicedText.split(/\r?\n/);
+    var row        = (splitText.length - 1);
+    var column     = splitText[row].length;
+
+    return {
+      row: row,
+      column: column
     }
   }
 
@@ -66,6 +86,13 @@ export class BoundElement {
       return {
         top: this.element.heightAtLine(nextLine),
         left: coords.left + parseInt(computed.borderLeftWidth)
+      }
+    } else if (this.isAceEditor) {
+      let cursorRect = this.element.renderer.$cursorLayer.element.getElementsByClassName("ace_cursor")[0].getBoundingClientRect();
+
+      return {
+        top: cursorRect.top + cursorRect.height,
+        left: cursorRect.left
       }
     } else if (this.isContenteditable){
       let selection = this.window.getSelection();
@@ -81,6 +108,9 @@ export class BoundElement {
     if (this.isCodeMirror){
       let coords = this.element.getCursor(true);
       this.element.doc.replaceRange(text, coords, coords);
+    } else if (this.isAceEditor){
+      let coords = this.element.getCursorPosition();
+      this.element.session.insert(coords, text);
     } else if (this.isContenteditable){
       return this.insertTextForContenteditable(text)
     } else {
@@ -179,11 +209,25 @@ export class BoundElement {
     }
   }
 
+  public caretPositionWithDocumentInfoForAceEditor(): object {
+    let value  = this.element.getValue();
+    let cursor = this.element.getCursorPosition()
+    let row    = cursor.row;
+    let column = cursor.column;
+
+    return this.caretPositionWithDocumentInfoForValueRowAndColumn(value, row, column);
+  }
+
   public caretPositionWithDocumentInfoForCodeMirror(): object {
     let value          = this.element.getValue();
     let cursor         = this.element.getCursor(true);
     let row            = cursor.line;
     let column         = cursor.ch;
+
+    return this.caretPositionWithDocumentInfoForValueRowAndColumn(value, row, column);
+  }
+
+  private caretPositionWithDocumentInfoForValueRowAndColumn(value, row, column): object {
     let leftTextArray  = [];
     let rightTextArray = [];
 

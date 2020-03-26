@@ -2,6 +2,7 @@ import { BoundElement } from './BoundElement';
 export declare class DropkiqUI {
     element: any;
     isCodeMirror: boolean;
+    isAceEditor: boolean;
     boundElement: BoundElement;
     schema: object;
     context: object;
