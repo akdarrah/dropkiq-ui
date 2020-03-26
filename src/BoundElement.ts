@@ -20,6 +20,8 @@ export class BoundElement {
   public setFocus() {
     if (this.isCodeMirror){
       this.element.focus();
+    } else if (this.isAceEditor) {
+      this.element.focus();
     } else {
       let event = new Event('focus');
       this.element.dispatchEvent(event);
@@ -41,13 +43,15 @@ export class BoundElement {
   // position is for input, textNode is for contenteditable
   public setCaretPosition(position, textNode){
     if (this.isCodeMirror){
-      var text       = this.element.getValue();
-      var slicedText = text.slice(0, position);
-      var splitText  = slicedText.split(/\r?\n/);
-      var line       = (splitText.length - 1);
-      var column     = splitText[line].length;
+      var text = this.element.getValue();
+      var rowAndColumn = this.getRowAndColumnForPosition(text, position);
 
-      this.element.doc.setCursor({line: line, ch: column});
+      this.element.doc.setCursor({line: rowAndColumn.row, ch: rowAndColumn.column});
+    } else if (this.isAceEditor) {
+      var text = this.element.getValue();
+      var rowAndColumn = this.getRowAndColumnForPosition(text, position);
+
+      this.element.moveCursorTo(rowAndColumn.row, rowAndColumn.column);
     } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
@@ -57,6 +61,18 @@ export class BoundElement {
       sel.addRange(range);
     } else {
       this.element.setSelectionRange(position, position);
+    }
+  }
+
+  private getRowAndColumnForPosition(text, position) {
+    var slicedText = text.slice(0, position);
+    var splitText  = slicedText.split(/\r?\n/);
+    var row        = (splitText.length - 1);
+    var column     = splitText[row].length;
+
+    return {
+      row: row,
+      column: column
     }
   }
 
@@ -92,6 +108,9 @@ export class BoundElement {
     if (this.isCodeMirror){
       let coords = this.element.getCursor(true);
       this.element.doc.replaceRange(text, coords, coords);
+    } else if (this.isAceEditor){
+      let coords = this.element.getCursorPosition();
+      this.element.session.insert(coords, text);
     } else if (this.isContenteditable){
       return this.insertTextForContenteditable(text)
     } else {

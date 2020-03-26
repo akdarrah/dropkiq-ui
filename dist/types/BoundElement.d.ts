@@ -10,6 +10,7 @@ export declare class BoundElement {
     setFocus(): void;
     caretPositionWithDocumentInfo(): object;
     setCaretPosition(position: any, textNode: any): void;
+    private getRowAndColumnForPosition;
     getCaretPosition(): {
         top: any;
         left: any;

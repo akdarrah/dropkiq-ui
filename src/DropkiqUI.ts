@@ -192,8 +192,10 @@ export class DropkiqUI {
       this.element.on("focus", function(cm, e){ findResultsCallback(e); });
       this.element.on("blur", function(em, e){ onBlurCallback(e); });
     } else if(this.isAceEditor){
-      this.element.on('change', keydownCallback);
-      this.element.on("mousedown", findResultsCallback);
+      this.element.textInput.getElement()
+        .addEventListener('keydown', keydownCallback);
+
+      this.element.on("click", findResultsCallback);
       this.element.on("focus", findResultsCallback);
       this.element.on("blur", onBlurCallback);
     } else {
