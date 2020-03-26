@@ -138,6 +138,15 @@
 
       var editor = ace.edit("dropkiq-example");
       var dropkiqUI = new DropkiqUI(editor, schema, context, scope, "");
+
+      var keyboardHandler = {
+        handleKeyboard: function(editor, index, name, keyCode){
+          if(dropkiqUI.menuIsOpen() && [27, 38, 40, 9, 13].includes(keyCode)){
+            return {command:"null", passEvent:false};
+          }
+        }
+      }
+      editor.keyBinding.addKeyboardHandler(keyboardHandler);
     </script>    
   </body>
 </html>
