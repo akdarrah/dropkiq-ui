@@ -83,3 +83,41 @@ describe('BoundElement#setExpiringCachedOnBlurRange', () => {
     expect(boundElement.cachedOnBlurRange).toStrictEqual(null);
   });
 })
+
+describe('BoundElement#getRowAndColumnForPosition', () => {
+  it('handles the most basic case', () => {
+    let element = document.getElementById('dropkiq-example');
+    let boundElement = new BoundElement(element, window, document);
+
+    let text     = "Testinggg"
+    let position = 0;
+    let result   = boundElement['getRowAndColumnForPosition'](text, position);
+
+    expect(result.row).toBe(0);
+    expect(result.column).toBe(0);
+  });
+
+  it('handles when the cursor is in another position', () => {
+    let element = document.getElementById('dropkiq-example');
+    let boundElement = new BoundElement(element, window, document);
+
+    let text     = "Testinggg"
+    let position = 5;
+    let result   = boundElement['getRowAndColumnForPosition'](text, position);
+
+    expect(result.row).toBe(0);
+    expect(result.column).toBe(5);
+  });
+
+  it('works when there are multiple lines', () => {
+    let element = document.getElementById('dropkiq-example');
+    let boundElement = new BoundElement(element, window, document);
+
+    let text     = "Testinggg\nTest"
+    let position = 12;
+    let result   = boundElement['getRowAndColumnForPosition'](text, position);
+
+    expect(result.row).toBe(1);
+    expect(result.column).toBe(2);
+  });
+})
