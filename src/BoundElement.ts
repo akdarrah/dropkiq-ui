@@ -57,9 +57,15 @@ export class BoundElement {
       );
     } else if (this.isAceEditor) {
       var text = this.element.getValue();
-      var rowAndColumn = this.getRowAndColumnForPosition(text, start);
+      var rowAndColumn = this.getRowAndColumnForPosition(text, caretWordStart);
 
-      this.element.moveCursorTo(rowAndColumn.row, rowAndColumn.column);
+      var columnStart = (rowAndColumn.column + start);
+      var columnEnd   = (rowAndColumn.column + end);
+
+      this.element.getSelection().setSelectionRange({
+        start: { row: rowAndColumn.row, column: columnStart },
+        end: { row: rowAndColumn.row, column: columnEnd }
+      }, false);
     } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
