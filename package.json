@@ -26,7 +26,7 @@
     ]
   },
   "dependencies": {
-    "dropkiq": "^1.0.49",
+    "dropkiq": "^1.0.50",
     "tippy.js": "^5.1.4",
     "tslib": "^1.6.1"
   },
