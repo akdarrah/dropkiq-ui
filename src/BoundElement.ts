@@ -46,9 +46,15 @@ export class BoundElement {
 
     if (this.isCodeMirror){
       var text = this.element.getValue();
-      var rowAndColumn = this.getRowAndColumnForPosition(text, start);
+      var rowAndColumn = this.getRowAndColumnForPosition(text, caretWordStart);
 
-      this.element.doc.setCursor({line: rowAndColumn.row, ch: rowAndColumn.column});
+      var columnStart = (rowAndColumn.column + start);
+      var columnEnd   = (rowAndColumn.column + end);
+
+      this.element.doc.setSelection(
+        {line: rowAndColumn.row, ch: columnStart},
+        {line: rowAndColumn.row, ch: columnEnd}
+      );
     } else if (this.isAceEditor) {
       var text = this.element.getValue();
       var rowAndColumn = this.getRowAndColumnForPosition(text, start);
