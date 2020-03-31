@@ -412,7 +412,13 @@ export class DropkiqUI {
 
   private insertSuggestion(suggestion){
     let prefix = this.result['prefix'];
-    let suggestionText = suggestion['name'];
+    let suggestionText;
+
+    if(suggestion.type === "ColumnTypes::Filter"){
+      suggestionText = suggestion['insertionTemplate'];
+    } else {
+      suggestionText = suggestion['name'];
+    }
 
     let textToEnter = suggestionText.slice(prefix.length, suggestionText.length);
 
