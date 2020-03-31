@@ -41,26 +41,31 @@ export class BoundElement {
   }
 
   // position is for input, textNode is for contenteditable
-  public setCaretPosition(position, textNode){
+  public setCaretPosition(caretIndex, start, end, textNode, prefix){
+    let caretWordStart = (caretIndex - prefix.length);
+
     if (this.isCodeMirror){
       var text = this.element.getValue();
-      var rowAndColumn = this.getRowAndColumnForPosition(text, position);
+      var rowAndColumn = this.getRowAndColumnForPosition(text, start);
 
       this.element.doc.setCursor({line: rowAndColumn.row, ch: rowAndColumn.column});
     } else if (this.isAceEditor) {
       var text = this.element.getValue();
-      var rowAndColumn = this.getRowAndColumnForPosition(text, position);
+      var rowAndColumn = this.getRowAndColumnForPosition(text, start);
 
       this.element.moveCursorTo(rowAndColumn.row, rowAndColumn.column);
     } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
-      range.setStart(textNode, 0);
-      range.collapse(true);
+      range.setStart(textNode, (start - prefix.length));
+      range.setEnd(textNode, (end - prefix.length));
       sel.removeAllRanges();
       sel.addRange(range);
     } else {
-      this.element.setSelectionRange(position, position);
+      let newCaretStart = (caretWordStart + start);
+      let newCaretEnd   = (caretWordStart + end);
+
+      this.element.setSelectionRange(newCaretStart, newCaretEnd);
     }
   }
 
