@@ -9,7 +9,7 @@ export declare class BoundElement {
     constructor(element: any, window: any, document: any);
     setFocus(): void;
     caretPositionWithDocumentInfo(): object;
-    setCaretPosition(position: any, textNode: any): void;
+    setCaretPosition(caretIndex: any, start: any, end: any, textNode: any, prefix: any): void;
     private getRowAndColumnForPosition;
     getCaretPosition(): {
         top: any;

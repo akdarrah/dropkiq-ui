@@ -158,11 +158,11 @@ export class DropkiqUI {
 
         if (e.keyCode == 219 && e.shiftKey && (leftTwoCharacters[1] == "{" || leftTwoCharacters == "{")){
           let textNode = that.boundElement.insertTextAtCaret("}");
-          that.boundElement.setCaretPosition(selectionStart, textNode);
+          that.boundElement.setCaretPosition(selectionStart, 0, 0, textNode, "");
           that.element.focus();
         } else if (e.keyCode == 53 && e.shiftKey && leftTwoCharacters == "{%" && closeTagPattern.test(rightText)){
           let textNode = that.boundElement.insertTextAtCaret("%");
-          that.boundElement.setCaretPosition(selectionStart, textNode);
+          that.boundElement.setCaretPosition(selectionStart, 0, 0, textNode, "");
           that.element.focus();
         }
       }, 25);
@@ -412,7 +412,15 @@ export class DropkiqUI {
 
   private insertSuggestion(suggestion){
     let prefix = this.result['prefix'];
-    let suggestionText = suggestion['name'];
+    let suggestionText;
+    let caretPositionWithDocumentInfo;
+
+    if(suggestion.type === "ColumnTypes::Filter"){
+      caretPositionWithDocumentInfo = this.boundElement.caretPositionWithDocumentInfo();
+      suggestionText = suggestion['insertionTemplate'];
+    } else {
+      suggestionText = suggestion['name'];
+    }
 
     let textToEnter = suggestionText.slice(prefix.length, suggestionText.length);
 
@@ -420,7 +428,15 @@ export class DropkiqUI {
       textToEnter = (textToEnter + ".");
     }
 
-    this.boundElement.insertTextAtCaret(textToEnter);
+    let textNode = this.boundElement.insertTextAtCaret(textToEnter);
+
+    if(suggestion.type === "ColumnTypes::Filter"){
+      let startSelect   = suggestion['selectRange'][0];
+      let endSelect     = suggestion['selectRange'][1];
+
+      this.boundElement.setCaretPosition(caretPositionWithDocumentInfo['selectionStart'], startSelect, endSelect, textNode, prefix);
+    }
+
     this.boundElement.setFocus();
     this.closeMenu();
 

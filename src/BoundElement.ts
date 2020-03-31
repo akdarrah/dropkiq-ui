@@ -41,26 +41,43 @@ export class BoundElement {
   }
 
   // position is for input, textNode is for contenteditable
-  public setCaretPosition(position, textNode){
+  public setCaretPosition(caretIndex, start, end, textNode, prefix){
+    let caretWordStart = (caretIndex - prefix.length);
+
     if (this.isCodeMirror){
       var text = this.element.getValue();
-      var rowAndColumn = this.getRowAndColumnForPosition(text, position);
+      var rowAndColumn = this.getRowAndColumnForPosition(text, caretWordStart);
 
-      this.element.doc.setCursor({line: rowAndColumn.row, ch: rowAndColumn.column});
+      var columnStart = (rowAndColumn.column + start);
+      var columnEnd   = (rowAndColumn.column + end);
+
+      this.element.doc.setSelection(
+        {line: rowAndColumn.row, ch: columnStart},
+        {line: rowAndColumn.row, ch: columnEnd}
+      );
     } else if (this.isAceEditor) {
       var text = this.element.getValue();
-      var rowAndColumn = this.getRowAndColumnForPosition(text, position);
+      var rowAndColumn = this.getRowAndColumnForPosition(text, caretWordStart);
 
-      this.element.moveCursorTo(rowAndColumn.row, rowAndColumn.column);
+      var columnStart = (rowAndColumn.column + start);
+      var columnEnd   = (rowAndColumn.column + end);
+
+      this.element.getSelection().setSelectionRange({
+        start: { row: rowAndColumn.row, column: columnStart },
+        end: { row: rowAndColumn.row, column: columnEnd }
+      }, false);
     } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
-      range.setStart(textNode, 0);
-      range.collapse(true);
+      range.setStart(textNode, (start - prefix.length));
+      range.setEnd(textNode, (end - prefix.length));
       sel.removeAllRanges();
       sel.addRange(range);
     } else {
-      this.element.setSelectionRange(position, position);
+      let newCaretStart = (caretWordStart + start);
+      let newCaretEnd   = (caretWordStart + end);
+
+      this.element.setSelectionRange(newCaretStart, newCaretEnd);
     }
   }
 
