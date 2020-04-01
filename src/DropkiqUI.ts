@@ -206,6 +206,10 @@ export class DropkiqUI {
     }
   }
 
+  public registerFilter(name: string, filter: Function, template: string, selectionRange: Array<number>, hint?: string){
+    this.dropkiqEngine.registerFilter(name, filter, template, selectionRange, hint);
+  }
+
   public menuIsOpen(){
     return (this.suggestionsArray.length > 0);
   }

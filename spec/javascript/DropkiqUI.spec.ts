@@ -302,3 +302,20 @@ describe('DropkiqUI#suggestionTitleText', () => {
     expect(titleText).toStrictEqual("Test **OUTPUT** Preview **HINT** Hint")
   })
 })
+
+describe('DropkiqUI#registerFilter', () => {
+  it('A custom filter can be registered', () => {
+	  let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    let boundElement = dropkiqUI['boundElement'];
+
+    expect(Object.keys(dropkiqUI['dropkiqEngine']['dataSchema']['filterRegistry']['registry']).length).toBe(45);
+
+    dropkiqUI.registerFilter('fire', function(str: string, count: number){
+      return `${str} ${'🔥'.repeat(count)}`;
+    }, "fire: 3", [6,7], "add n 🔥-emojis to the end of your string");
+
+    expect(Object.keys(dropkiqUI['dropkiqEngine']['dataSchema']['filterRegistry']['registry']).length).toBe(46);
+  })
+})
