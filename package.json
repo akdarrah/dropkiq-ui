@@ -1,6 +1,6 @@
 {
   "name": "dropkiq-ui",
-  "version": "1.0.48",
+  "version": "1.0.49",
   "description": "Liquid Expressions Simplified",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
