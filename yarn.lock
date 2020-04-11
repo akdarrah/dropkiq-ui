@@ -2080,10 +2080,10 @@ domexception@^2.0.1:
   dependencies:
     webidl-conversions "^5.0.0"
 
-dropkiq@^1.0.51:
-  version "1.0.51"
-  resolved "https://registry.yarnpkg.com/dropkiq/-/dropkiq-1.0.51.tgz#010db62e479ba30e56cf2f830e7577761f443815"
-  integrity sha512-MMzqw9MBHy2h/w2HzFRbYSWIPEGz+aUAr9zBBCWF9qHQ8diVvrLv7Bkoab8vTBjPG7ZGsx+suJVpZ8F3KOeXbA==
+dropkiq@^1.0.52:
+  version "1.0.52"
+  resolved "https://registry.yarnpkg.com/dropkiq/-/dropkiq-1.0.52.tgz#cb71199acb7b435c10c53ccd5fb531da1727a047"
+  integrity sha512-v402trMJrpOFFjBPHjxcjky5oYMCV9XNIdJ16fchSKRcfiEVEfL/xkKhlwz/umlFT0PSBHaWts4FWxWr5oHsOA==
   dependencies:
     axios "^0.18.1"
     js-yaml "^3.0.0"
