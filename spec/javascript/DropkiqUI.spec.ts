@@ -166,6 +166,47 @@ describe('DropkiqUI#findResults', () => {
     }).not.toThrow();
     expect(dropkiqUI['result']).toStrictEqual({});
   })
+
+  it('closes the menu if an exception happens in dropkiqEngine.update', () => {
+	  let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    let boundElement = dropkiqUI['boundElement'];
+
+    boundElement.caretPositionWithDocumentInfo = function(){
+      return {
+        leftText: "{{ event.",
+        selectionStart: 9,
+        rightText: " }}",
+        allText: ("{{ event. }}")
+      }
+    }
+
+    boundElement.getCaretPosition = function(){
+      return {
+        top: 1000,
+        left: 4000,
+      }
+    }
+
+    dropkiqUI['findResults']();
+    expect(dropkiqUI['suggestionsArray'].length).toBe(1); // Non-Pro
+
+    boundElement.caretPositionWithDocumentInfo = function(){
+      return {
+        leftText: "{{ event..",
+        selectionStart: 10,
+        rightText: " }}",
+        allText: ("{{ event.. }}")
+      }
+    }
+
+    try {
+      dropkiqUI['findResults']();
+    } catch (e) {
+      expect(dropkiqUI['suggestionsArray'].length).toBe(0);
+    }
+  })
 })
 
 describe('DropkiqUI#scrollToNext', () => {

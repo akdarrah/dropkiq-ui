@@ -395,6 +395,8 @@ export class DropkiqUI {
     try {
       this.result = this.dropkiqEngine.update(result['allText'], result['selectionStart']);
     } catch(error) {
+      this.closeMenu();
+
       if (error.name === "ParseError") {
         return false;
       } else {
