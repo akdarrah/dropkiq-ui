@@ -98,7 +98,7 @@ export class DropkiqUI {
     } else {
       let newFingerprint = uuidv4();
       
-      if(!this.window.dropkiqRegistry){
+      if(!this.window.dropkiqUIInstances){
         this.window.dropkiqUIInstances = {};
       }
 

@@ -1,4 +1,5 @@
 import { DropkiqUI } from '../../src/DropkiqUI';
+import { v4 as uuidv4 } from 'uuid';
 
 const testSchema = {
 	"custom_field_values": {
@@ -117,6 +118,58 @@ describe('DropkiqUI#constructor', () => {
 
     let dropkiqDiv = document.getElementById('dropkiq-autosuggest-menu');
     expect(dropkiqDiv.innerHTML.length).not.toBe(0);
+  })
+
+  it('can be initialized multiple times on the same text element', () => {
+    let licenseKey = uuidv4();
+	  let element = document.getElementById('dropkiq-example');
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+
+    let dropkiqUITwo = new DropkiqUI(element, testSchema, context, {}, "");
+    expect(dropkiqUITwo.licenseKey).toBe(licenseKey);
+
+    let dropkiqUIThree = new DropkiqUI(element, testSchema, context, {}, "");
+    expect(dropkiqUIThree.licenseKey).toBe(licenseKey);
+  })
+
+  it('can be initialized multiple times on the same input', () => {
+    let licenseKey = uuidv4();
+	  let element = document.getElementById('dropkiq-input-example');
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+
+    let dropkiqUITwo = new DropkiqUI(element, testSchema, context, {}, "");
+    expect(dropkiqUITwo.licenseKey).toBe(licenseKey);
+
+    let dropkiqUIThree = new DropkiqUI(element, testSchema, context, {}, "");
+    expect(dropkiqUIThree.licenseKey).toBe(licenseKey);
+  })
+
+  it('can be initialized multiple times on the same contenteditable', () => {
+    let licenseKey = uuidv4();
+	  let element = document.getElementById('dropkiq-contenteditable-example');
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+
+    let dropkiqUITwo = new DropkiqUI(element, testSchema, context, {}, "");
+    expect(dropkiqUITwo.licenseKey).toBe(licenseKey);
+
+    let dropkiqUIThree = new DropkiqUI(element, testSchema, context, {}, "");
+    expect(dropkiqUIThree.licenseKey).toBe(licenseKey);
+  })
+
+  it('multiple instances can be active at the same time', () => {
+    let textLicenseKey = uuidv4();
+	  let textElement = document.getElementById('dropkiq-contenteditable-example');
+    let textDropkiqUI = new DropkiqUI(textElement, testSchema, context, {}, textLicenseKey);
+
+    let textDropkiqUITwo = new DropkiqUI(textElement, testSchema, context, {}, "");
+    expect(textDropkiqUITwo.licenseKey).toBe(textLicenseKey);
+
+    let inputLicenseKey = uuidv4();
+	  let inputElement = document.getElementById('dropkiq-input-example');
+    let inputDropkiqUI = new DropkiqUI(inputElement, testSchema, context, {}, inputLicenseKey);
+
+    let inputDropkiqUITwo = new DropkiqUI(inputElement, testSchema, context, {}, "");
+    expect(inputDropkiqUITwo.licenseKey).toBe(inputLicenseKey);
   })
 })
 
