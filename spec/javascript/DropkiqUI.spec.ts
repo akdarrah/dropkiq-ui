@@ -86,6 +86,18 @@ const context = {
   }
 }
 
+afterEach(() => {
+  delete window['dropkiqUIInstances'];
+
+  let textareaElement = document.getElementById('dropkiq-example');
+  let inputElement = document.getElementById('dropkiq-input-example');
+  let contenteditable = document.getElementById('dropkiq-contenteditable-example');
+
+  textareaElement.removeAttribute('data-dropkiq-fingerprint');
+  inputElement.removeAttribute('data-dropkiq-fingerprint');
+  contenteditable.removeAttribute('data-dropkiq-fingerprint');
+});
+
 describe('DropkiqUI#constructor', () => {
   it('can be initialized', () => {
 	  let element = document.getElementById('dropkiq-example');
@@ -139,7 +151,7 @@ describe('DropkiqUI#findResults', () => {
 
   it('silences ParseErrors from unfinished Liquid expressions', () => {
 	  let element = document.getElementById('dropkiq-example');
-	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
     let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
 
     let boundElement = dropkiqUI['boundElement'];
