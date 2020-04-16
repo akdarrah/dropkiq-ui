@@ -1,4 +1,35 @@
 import { BoundElement } from './BoundElement';
+declare enum ColumnType {
+    Boolean = "ColumnTypes::Boolean",
+    DateTime = "ColumnTypes::DateTime",
+    HasMany = "ColumnTypes::HasMany",
+    HasOne = "ColumnTypes::HasOne",
+    Numeric = "ColumnTypes::Numeric",
+    String = "ColumnTypes::String",
+    Text = "ColumnTypes::Text",
+    YAML = "ColumnTypes::YAML"
+}
+interface Suggestion {
+    active?: boolean;
+    foreign_table_name: string | null;
+    hint?: string;
+    iconImageURLForSuggestion: string;
+    insertionTemplate?: string;
+    name: string;
+    nameWithoutPrefix: string;
+    prefix?: string;
+    preview?: string;
+    selectRange?: Array<number>;
+    template: string;
+    type: ColumnType;
+}
+interface DropkiqOptions {
+    iframe?: HTMLIFrameElement;
+    onRender?: (renderedDocument: string) => void;
+    showHints?: () => boolean;
+    showPreviews?: () => boolean;
+    suggestionFilter?: (suggestions: Suggestion[]) => void;
+}
 export declare class DropkiqUI {
     element: any;
     isCodeMirror: boolean;
@@ -8,7 +39,7 @@ export declare class DropkiqUI {
     context: object;
     scope: object;
     licenseKey: string;
-    options: object;
+    options: DropkiqOptions;
     showPreviews: Function;
     showHints: Function;
     suggestionFilter: Function;
@@ -27,7 +58,7 @@ export declare class DropkiqUI {
     private $poweredByDropkiq;
     private $paywall;
     private documentCallback;
-    constructor(element: any, schema: object, context: object, scope: object, licenseKey?: string, options?: object);
+    constructor(element: any, schema: object, context: object, scope: object, licenseKey?: string, options?: DropkiqOptions);
     registerFilter(name: string, filter: Function, template: string, selectionRange: Array<number>, hint?: string): void;
     menuIsOpen(): boolean;
     closeMenu(): void;
@@ -39,3 +70,4 @@ export declare class DropkiqUI {
     private scrollToPrevious;
     private suggestionTitleText;
 }
+export {};

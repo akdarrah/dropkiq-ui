@@ -2,6 +2,40 @@ const { DropkiqEngine } = require('dropkiq')
 import { BoundElement } from './BoundElement'
 import tippy from 'tippy.js';
 
+enum ColumnType {
+  Boolean  = 'ColumnTypes::Boolean',
+  DateTime = 'ColumnTypes::DateTime',
+  HasMany  = 'ColumnTypes::HasMany',
+  HasOne   = 'ColumnTypes::HasOne',
+  Numeric  = 'ColumnTypes::Numeric',
+  String   = 'ColumnTypes::String',
+  Text     = 'ColumnTypes::Text',
+  YAML     = 'ColumnTypes::YAML'
+}
+
+interface Suggestion {
+  active?: boolean
+  foreign_table_name: string | null
+  hint?: string
+  iconImageURLForSuggestion: string
+  insertionTemplate?: string
+  name: string
+  nameWithoutPrefix: string
+  prefix?: string
+  preview?: string
+  selectRange?: Array<number>
+  template: string
+  type: ColumnType
+}
+
+interface DropkiqOptions {
+  iframe?: HTMLIFrameElement
+  onRender?: (renderedDocument: string) => void
+  showHints?: () => boolean
+  showPreviews?: () => boolean
+  suggestionFilter?: (suggestions: Suggestion[]) => void
+}
+
 export class DropkiqUI {
   public element: any;
   public isCodeMirror: boolean;
@@ -12,7 +46,7 @@ export class DropkiqUI {
   public scope: object;
   public licenseKey: string;
 
-  public options: object;
+  public options: DropkiqOptions;
   public showPreviews: Function;
   public showHints: Function;
   public suggestionFilter: Function;
@@ -22,7 +56,7 @@ export class DropkiqUI {
   public window: any;
 
   private dropkiqEngine: any;
-  private suggestionsArray: Array<object>;
+  private suggestionsArray: Array<Suggestion>;
   private result: object;
   private caretOffset: object;
   private pathSchema: [];
@@ -33,7 +67,7 @@ export class DropkiqUI {
   private $paywall: any;
   private documentCallback: any;
 
-  constructor(element, schema: object, context: object, scope: object, licenseKey: string = "", options: object = {}) {
+  constructor(element, schema: object, context: object, scope: object, licenseKey: string = "", options: DropkiqOptions = {}) {
     this.schema = schema;
     this.context = context;
     this.scope = scope;
