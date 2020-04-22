@@ -1,5 +1,4 @@
 import { DropkiqUI } from '../../src/DropkiqUI';
-import { v4 as uuidv4 } from 'uuid';
 
 const testSchema = {
 	"custom_field_values": {
@@ -121,7 +120,7 @@ describe('DropkiqUI#constructor', () => {
   })
 
   it('can be initialized multiple times on the same text element', () => {
-    let licenseKey = uuidv4();
+    let licenseKey = "3f8f9a00-666e-0138-fa67-721898367c56";
 	  let element = document.getElementById('dropkiq-example');
     let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
 
@@ -133,7 +132,7 @@ describe('DropkiqUI#constructor', () => {
   })
 
   it('can be initialized multiple times on the same input', () => {
-    let licenseKey = uuidv4();
+    let licenseKey = "4864a550-666e-0138-fa67-721898367c56";
 	  let element = document.getElementById('dropkiq-input-example');
     let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
 
@@ -145,7 +144,7 @@ describe('DropkiqUI#constructor', () => {
   })
 
   it('can be initialized multiple times on the same contenteditable', () => {
-    let licenseKey = uuidv4();
+    let licenseKey = "4fdca4e0-666e-0138-fa67-721898367c56";
 	  let element = document.getElementById('dropkiq-contenteditable-example');
     let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
 
@@ -157,14 +156,14 @@ describe('DropkiqUI#constructor', () => {
   })
 
   it('multiple instances can be active at the same time', () => {
-    let textLicenseKey = uuidv4();
+    let textLicenseKey = "56478560-666e-0138-fa67-721898367c56";
 	  let textElement = document.getElementById('dropkiq-contenteditable-example');
     let textDropkiqUI = new DropkiqUI(textElement, testSchema, context, {}, textLicenseKey);
 
     let textDropkiqUITwo = new DropkiqUI(textElement, testSchema, context, {}, "");
     expect(textDropkiqUITwo.licenseKey).toBe(textLicenseKey);
 
-    let inputLicenseKey = uuidv4();
+    let inputLicenseKey = "5af85c90-666e-0138-fa67-721898367c56";
 	  let inputElement = document.getElementById('dropkiq-input-example');
     let inputDropkiqUI = new DropkiqUI(inputElement, testSchema, context, {}, inputLicenseKey);
 
