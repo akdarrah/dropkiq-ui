@@ -28,8 +28,7 @@
   "dependencies": {
     "dropkiq": "^1.0.52",
     "tippy.js": "^5.1.4",
-    "tslib": "^1.6.1",
-    "uuid": "^7.0.3"
+    "tslib": "^1.6.1"
   },
   "devDependencies": {
     "@types/jest": "^24.9.0",
