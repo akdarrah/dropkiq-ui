@@ -1,7 +1,6 @@
 const { DropkiqEngine } = require('dropkiq')
 import { BoundElement } from './BoundElement'
 import tippy from 'tippy.js';
-import { v4 as uuidv4 } from 'uuid';
 
 enum ColumnType {
   Boolean  = 'ColumnTypes::Boolean',
@@ -90,20 +89,16 @@ export class DropkiqUI {
     }
 
     this.element = element;
-    let dropkiqFingerprint = this.element.dataset.dropkiqFingerprint;
 
-    if(dropkiqFingerprint){
-      let existingInstance = this.window.dropkiqUIInstances[dropkiqFingerprint];
+    if(!this.window.dropkiqUIInstances){
+      this.window.dropkiqUIInstances = {};
+    }
+
+    let existingInstance = this.window.dropkiqUIInstances[this.element];
+    if(existingInstance){
       return existingInstance;
     } else {
-      let newFingerprint = uuidv4();
-      
-      if(!this.window.dropkiqUIInstances){
-        this.window.dropkiqUIInstances = {};
-      }
-
-      this.element.dataset.dropkiqFingerprint = newFingerprint;
-      this.window.dropkiqUIInstances[newFingerprint] = this;
+      this.window.dropkiqUIInstances[this.element] = this;
     }
 
     this.isCodeMirror = typeof(this.element['doc']) === 'object';
