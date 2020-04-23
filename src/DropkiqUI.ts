@@ -151,6 +151,10 @@ export class DropkiqUI {
       that.closeMenu();
     }
 
+    let scrollCallback = function(){
+      that.closeMenu();
+    }
+
     let keydownCallback = function(e) {
       if(that.suggestionsArray.length){
         let suggestion;
@@ -237,6 +241,7 @@ export class DropkiqUI {
       this.element.on("mousedown", function(cm, e){ findResultsCallback(e); });
       this.element.on("focus", function(cm, e){ findResultsCallback(e); });
       this.element.on("blur", function(em, e){ onBlurCallback(e); });
+      this.element.on("scroll", function(em, e){ scrollCallback(); });
     } else if(this.isAceEditor){
       this.element.textInput.getElement()
         .addEventListener('keydown', keydownCallback);
@@ -244,11 +249,14 @@ export class DropkiqUI {
       this.element.on("click", findResultsCallback);
       this.element.on("focus", findResultsCallback);
       this.element.on("blur", onBlurCallback);
+      this.element.session.on("changeScrollTop", scrollCallback);
+      this.element.session.on("changeScrollLeft", scrollCallback);
     } else {
       this.element.addEventListener('keydown', keydownCallback);
       this.element.addEventListener("click", findResultsCallback);
       this.element.addEventListener("focus", findResultsCallback);
       this.element.addEventListener("blur", onBlurCallback);
+      this.element.addEventListener("scroll", scrollCallback);
     }
   }
 
