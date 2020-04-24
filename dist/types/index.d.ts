@@ -1,2 +1,3 @@
-export { DropkiqUI } from './DropkiqUI';
-export { DropkiqUIFromScope } from './DropkiqUIFromScope';
+import { DropkiqUI } from './DropkiqUI';
+import { DropkiqUIFromScope } from './DropkiqUIFromScope';
+export { DropkiqUI, DropkiqUIFromScope };
