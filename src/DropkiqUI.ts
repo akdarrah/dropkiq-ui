@@ -464,6 +464,7 @@ export class DropkiqUI {
     this.suggestionsArray = this.result['suggestionsArray'] || emptyArray;
 
     if(this.suggestionsArray.length > 0){
+      this.suggestionsArray = this.suggestionsArray.sort((a, b) => (a.name > b.name) ? 1 : -1);
       this.suggestionsArray[0]['active'] = true;
     }
 
