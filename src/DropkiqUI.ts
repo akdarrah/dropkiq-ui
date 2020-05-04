@@ -54,12 +54,12 @@ export class DropkiqUI {
   public iframe: any;
   public document: any;
   public window: any;
+  public pathSchema: [];
 
   private dropkiqEngine: any;
   private suggestionsArray: Array<Suggestion>;
   private result: object;
   private caretOffset: object;
-  private pathSchema: [];
   private $ul: any;
   private $header: any;
   private $div: any;

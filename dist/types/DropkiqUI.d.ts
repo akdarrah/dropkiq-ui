@@ -47,11 +47,11 @@ export declare class DropkiqUI {
     iframe: any;
     document: any;
     window: any;
+    pathSchema: [];
     private dropkiqEngine;
     private suggestionsArray;
     private result;
     private caretOffset;
-    private pathSchema;
     private $ul;
     private $header;
     private $div;
