@@ -260,6 +260,11 @@ export class DropkiqUI {
     }
   }
 
+  public updateScope(scope: object) {
+    this.scope = scope;
+    this.dropkiqEngine.updateScope(this.scope);
+  }
+
   public registerFilter(name: string, filter: Function, template: string, selectionRange: Array<number>, hint?: string){
     this.dropkiqEngine.registerFilter(name, filter, template, selectionRange, hint);
   }

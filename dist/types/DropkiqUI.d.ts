@@ -59,6 +59,7 @@ export declare class DropkiqUI {
     private $paywall;
     private documentCallback;
     constructor(element: any, schema: object, context: object, scope: object, licenseKey?: string, options?: DropkiqOptions);
+    updateScope(scope: object): void;
     registerFilter(name: string, filter: Function, template: string, selectionRange: Array<number>, hint?: string): void;
     menuIsOpen(): boolean;
     closeMenu(): void;

@@ -424,3 +424,49 @@ describe('DropkiqUI#registerFilter', () => {
     expect(Object.keys(dropkiqUI['dropkiqEngine']['dataSchema']['filterRegistry']['registry']).length).toBe(46);
   })
 })
+
+describe('DropkiqUI#updateScope', () => {
+  it('Scope can be updated', () => {
+	  let element = document.getElementById('dropkiq-example');
+    let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let context = {
+      "test": {
+        type: "ColumnTypes::String",
+        foreign_table_name: null
+      }
+    }
+    let scope = {
+      test: "firstScope"
+    }
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, scope, licenseKey);
+    let boundElement = dropkiqUI['boundElement'];
+
+    boundElement.caretPositionWithDocumentInfo = function(){
+      return {
+        leftText: "{{ ",
+        selectionStart: 3,
+        rightText: " }}",
+        allText: ("{{  }}")
+      }
+    }
+    boundElement.getCaretPosition = function(){
+      return {
+        top: 1000,
+        left: 4000,
+      }
+    }
+
+    expect(dropkiqUI['result']).toStrictEqual({});
+    dropkiqUI['findResults']();
+    expect(dropkiqUI['result']['suggestionsArray'].length).toBe(1);
+    expect(dropkiqUI['result']['suggestionsArray'][0]['preview']).toBe("firstScope");
+
+    let newScope = {
+      test: "newScope"
+    }
+    dropkiqUI.updateScope(newScope);
+    dropkiqUI['findResults']();
+    expect(dropkiqUI['result']['suggestionsArray'].length).toBe(1);
+    expect(dropkiqUI['result']['suggestionsArray'][0]['preview']).toBe("newScope");
+  })
+})
