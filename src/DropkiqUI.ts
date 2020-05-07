@@ -458,6 +458,8 @@ export class DropkiqUI {
 
       if (error.name === "ParseError") {
         return false;
+      } else if (error.name === "RenderError") {
+        return false;
       } else {
         throw error;
       }

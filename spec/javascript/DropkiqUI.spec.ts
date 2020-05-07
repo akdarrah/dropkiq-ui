@@ -271,6 +271,110 @@ describe('DropkiqUI#findResults', () => {
       expect(dropkiqUI['suggestionsArray'].length).toBe(0);
     }
   })
+
+  it('swallows exceptions when you are accessing an array index with the left brace typed [', () => {
+	  let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    let boundElement = dropkiqUI['boundElement'];
+
+    boundElement.caretPositionWithDocumentInfo = function(){
+      return {
+        leftText: "{{ event.partnerships[",
+        selectionStart: 22,
+        rightText: " }}",
+        allText: ("{{ event.partnerships[ }}")
+      }
+    }
+
+    boundElement.getCaretPosition = function(){
+      return {
+        top: 1000,
+        left: 4000,
+      }
+    }
+
+    dropkiqUI['findResults']();
+    expect(dropkiqUI['suggestionsArray'].length).toBe(0);
+  })
+
+  it('swallows exceptions when you are accessing an array index with the left brace and index typed [0', () => {
+	  let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    let boundElement = dropkiqUI['boundElement'];
+
+    boundElement.caretPositionWithDocumentInfo = function(){
+      return {
+        leftText: "{{ event.partnerships[0",
+        selectionStart: 23,
+        rightText: " }}",
+        allText: ("{{ event.partnerships[0 }}")
+      }
+    }
+
+    boundElement.getCaretPosition = function(){
+      return {
+        top: 1000,
+        left: 4000,
+      }
+    }
+
+    dropkiqUI['findResults']();
+    expect(dropkiqUI['suggestionsArray'].length).toBe(0);
+  })
+
+  it('evaluates accessing an array index as an object for typed [0]', () => {
+	  let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    let boundElement = dropkiqUI['boundElement'];
+
+    boundElement.caretPositionWithDocumentInfo = function(){
+      return {
+        leftText: "{{ event.partnerships[0]",
+        selectionStart: 24,
+        rightText: " }}",
+        allText: ("{{ event.partnerships[0] }}")
+      }
+    }
+
+    boundElement.getCaretPosition = function(){
+      return {
+        top: 1000,
+        left: 4000,
+      }
+    }
+
+    dropkiqUI['findResults']();
+    expect(dropkiqUI['suggestionsArray'].length).toBe(0);
+  })
+
+  it('returns suggestions for accessing an array index [0].', () => {
+	  let element = document.getElementById('dropkiq-example');
+	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
+    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
+    let boundElement = dropkiqUI['boundElement'];
+
+    boundElement.caretPositionWithDocumentInfo = function(){
+      return {
+        leftText: "{{ event.partnerships[0].",
+        selectionStart: 25,
+        rightText: " }}",
+        allText: ("{{ event.partnerships[0]. }}")
+      }
+    }
+
+    boundElement.getCaretPosition = function(){
+      return {
+        top: 1000,
+        left: 4000,
+      }
+    }
+
+    dropkiqUI['findResults']();
+    expect(dropkiqUI['suggestionsArray'].length).toBe(1);
+  })
 })
 
 describe('DropkiqUI#scrollToNext', () => {
