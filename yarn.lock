@@ -7185,9 +7185,9 @@ timers-ext@^0.1.5:
     next-tick "1"
 
 tinymce@^5.3.2:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.3.2.tgz#c53622edf9c4b214bb912658762d6ea831d7d469"
-  integrity sha512-d8LaanlW+i/V5Ncb49gR2ncx0Tl2iWJBsepdsuT5qOlFaAPueIfc+btwwERXra7M6KDx0mOwKJaE2FBI+lHz3Q==
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.4.0.tgz#ae9c784fd36651d4d457be844a18fc138ca4f1f3"
+  integrity sha512-b3j+cUogfOtRt07Zc6iOrOAVosm4hekLtE85lmvjH7tPH7ncAIBv/cpdre9GdfeXSz7TVIJWASVvi4hkOTTh3A==
 
 tippy.js@^5.1.4:
   version "5.1.4"
