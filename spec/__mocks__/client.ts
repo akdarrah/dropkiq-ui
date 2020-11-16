@@ -6,6 +6,7 @@ const dom = new JSDOM(`
   <head></head>
   <body>
     <textarea id="dropkiq-example" rows="5" cols="33"></textarea>
+    <textarea id="dropkiq-example-2" rows="5" cols="33"></textarea>
     <input type="text" id="dropkiq-input-example" />
     <div id="dropkiq-contenteditable-example" contenteditable="true"></div>
   </body>

@@ -170,6 +170,18 @@ describe('DropkiqUI#constructor', () => {
     let inputDropkiqUITwo = new DropkiqUI(inputElement, testSchema, context, {}, "");
     expect(inputDropkiqUITwo.licenseKey).toBe(inputLicenseKey);
   })
+
+  it('multiple instances can be active at the same time (for same element type)', () => {
+    let textLicenseKey = "56478560-666e-0138-fa67-721898367c56";
+	  let textElement = document.getElementById('dropkiq-example');
+    let textDropkiqUI = new DropkiqUI(textElement, testSchema, context, {}, textLicenseKey);
+    expect(textDropkiqUI.licenseKey).toBe(textLicenseKey);
+
+    let text2LicenseKey = "5af85c90-666e-0138-fa67-721898367c56";
+	  let text2Element = document.getElementById('dropkiq-example-2');
+    let text2DropkiqUI = new DropkiqUI(text2Element, testSchema, context, {}, text2LicenseKey);
+    expect(text2DropkiqUI.licenseKey).toBe(text2LicenseKey);
+  })
 })
 
 describe('DropkiqUI#findResults', () => {

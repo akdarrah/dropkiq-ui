@@ -1,6 +1,7 @@
 const { DropkiqEngine } = require('dropkiq')
 import { BoundElement } from './BoundElement'
 import tippy from 'tippy.js';
+import { v4 as uuidv4 } from 'uuid';
 
 enum ColumnType {
   Boolean  = 'ColumnTypes::Boolean',
@@ -94,11 +95,16 @@ export class DropkiqUI {
       this.window.dropkiqUIInstances = {};
     }
 
-    let existingInstance = this.window.dropkiqUIInstances[this.element];
+    let dropkiqUUID = this.element.dataset.dropkiqUUID;
+    let existingInstance = this.window.dropkiqUIInstances[dropkiqUUID];
+
     if(existingInstance){
       return existingInstance;
     } else {
-      this.window.dropkiqUIInstances[this.element] = this;
+      dropkiqUUID = uuidv4();
+
+      this.element.dataset.dropkiqUUID = dropkiqUUID;
+      this.window.dropkiqUIInstances[dropkiqUUID] = this;
     }
 
     this.isCodeMirror = typeof(this.element['doc']) === 'object';
