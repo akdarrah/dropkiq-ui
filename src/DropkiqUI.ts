@@ -95,16 +95,22 @@ export class DropkiqUI {
       this.window.dropkiqUIInstances = {};
     }
 
-    let dropkiqUUID = this.element.dataset.dropkiqUUID;
+    let dropkiqUUID;
+    if(this.element.dataset){
+      dropkiqUUID = this.element.dataset.dropkiqUUID;
+    }
+
     let existingInstance = this.window.dropkiqUIInstances[dropkiqUUID];
 
     if(existingInstance){
       return existingInstance;
     } else {
-      dropkiqUUID = uuidv4();
+      if(this.element.dataset){
+        dropkiqUUID = uuidv4();
 
-      this.element.dataset.dropkiqUUID = dropkiqUUID;
-      this.window.dropkiqUIInstances[dropkiqUUID] = this;
+        this.element.dataset.dropkiqUUID = dropkiqUUID;
+        this.window.dropkiqUIInstances[dropkiqUUID] = this;
+      }
     }
 
     this.isCodeMirror = typeof(this.element['doc']) === 'object';
