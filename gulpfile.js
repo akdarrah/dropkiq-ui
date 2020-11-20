@@ -8,6 +8,7 @@ const browserify = require('browserify');
 const tsify = require('tsify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
+const babel = require('gulp-babel');
 
 var importCss = require('gulp-import-css');
 var sass = require('gulp-sass');
@@ -32,6 +33,15 @@ gulp.task('js', function() {
   .bundle().on('error', (e) => console.log(e))
   .pipe(source('dropkiq.min.js'))
   .pipe(buffer())
+  .pipe(babel({
+    presets: [
+      ['@babel/env', {
+        modules: false,
+        "useBuiltIns": "usage",
+        corejs: 3
+      }]
+    ]
+  }))
   .pipe(uglify(/* options */))
   .pipe(gulp.dest('dist'));
 });
@@ -43,6 +53,17 @@ gulp.task('default', gulp.series(gulp.parallel('sass'), gulp.parallel('js'), fun
 
   return merge([
     tsResult.dts.pipe(gulp.dest('dist/types')),
-    tsResult.js.pipe(uglify(/* options */)).pipe(gulp.dest('dist'))
+    tsResult.js
+      .pipe(babel({
+        presets: [
+          ['@babel/env', {
+            modules: false,
+            "useBuiltIns": "usage",
+            corejs: 3
+          }]
+        ]
+      }))
+      .pipe(uglify(/* options */))
+      .pipe(gulp.dest('dist'))
   ]);
 }));
