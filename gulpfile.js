@@ -53,17 +53,6 @@ gulp.task('default', gulp.series(gulp.parallel('sass'), gulp.parallel('js'), fun
 
   return merge([
     tsResult.dts.pipe(gulp.dest('dist/types')),
-    tsResult.js
-      .pipe(babel({
-        presets: [
-          ['@babel/env', {
-            modules: false,
-            "useBuiltIns": "usage",
-            corejs: 3
-          }]
-        ]
-      }))
-      .pipe(uglify(/* options */))
-      .pipe(gulp.dest('dist'))
+    tsResult.js.pipe(uglify(/* options */)).pipe(gulp.dest('dist'))
   ]);
 }));
