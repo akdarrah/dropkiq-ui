@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "dropkiq": "^1.0.63",
+    "sanitize-html": "^2.1.2",
     "tippy.js": "^5.1.4",
     "tslib": "^1.6.1",
     "uuid": "^8.3.1"
