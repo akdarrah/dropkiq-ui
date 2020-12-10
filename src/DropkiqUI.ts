@@ -2,7 +2,9 @@ const { DropkiqEngine } = require('dropkiq')
 import { BoundElement } from './BoundElement'
 import tippy from 'tippy.js';
 import { v4 as uuidv4 } from 'uuid';
-const sanitizeHtml = require('sanitize-html');
+
+const createDOMPurify = require('dompurify');
+const DOMPurify = createDOMPurify(window);
 
 enum ColumnType {
   Boolean  = 'ColumnTypes::Boolean',
@@ -404,7 +406,7 @@ export class DropkiqUI {
         $head.textContent = "OUTPUT";
 
         let $samp = document.createElement("div");
-        $samp.innerHTML = sanitizeHtml(suggestion['preview']);
+        $samp.innerHTML = DOMPurify.sanitize(suggestion['preview']);
 
         $extra.appendChild($head);
         $extra.appendChild($samp);
