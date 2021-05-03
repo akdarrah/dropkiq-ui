@@ -67,6 +67,9 @@ export class DropkiqUI {
   private $ul: any;
   private $header: any;
   private $div: any;
+  private $errorDiv: any;
+  private $errorMessage: any;
+  private $errorHeader: any;
   private $poweredByDropkiq: any;
   private $paywall: any;
   private documentCallback: any;
@@ -160,10 +163,23 @@ export class DropkiqUI {
     this.$div.appendChild(this.$poweredByDropkiq);
     document.body.appendChild(this.$div);
 
+    this.$errorHeader = document.createElement("div");
+    this.$errorMessage = document.createElement("div");
+    this.$errorDiv = document.createElement("div");
+    this.$errorHeader.textContent = 'Liquid Render Error';
+    this.$errorDiv.setAttribute('id', 'dropkiq-error-alert');
+    this.$errorHeader.setAttribute('class', 'dropkiq-error-header');
+    this.$errorMessage.setAttribute('class', 'dropkiq-error-message');
+    this.$errorDiv.appendChild(this.$errorHeader);
+    this.$errorDiv.appendChild(this.$errorMessage);
+    this.$errorDiv.appendChild(this.$poweredByDropkiq);
+    document.body.appendChild(this.$errorDiv);
+
     let that = this;
 
     that.documentCallback = function(){
       that.closeMenu();
+      that.closeErrorAlert();
     }
 
     let scrollCallback = function(){
@@ -288,6 +304,10 @@ export class DropkiqUI {
     return (this.suggestionsArray.length > 0);
   }
 
+  public closeErrorAlert(){
+    this.$errorDiv.style.display = 'none';
+  }
+ 
   public closeMenu(){
     this.removeDocumentEventListeners();
     this.suggestionsArray = [];
@@ -456,7 +476,31 @@ export class DropkiqUI {
     tippy('.hint-icon');
   }
 
+  private renderErrorAlert(error){
+    this.$errorMessage.textContent = error.message;
+
+    this.$poweredByDropkiq.style.display = "none";
+    if(!this.dropkiqEngine.authorizer.authorized()){
+      this.$poweredByDropkiq.style.display = "block";
+    }
+
+    this.$errorDiv.style.top = `${this.caretOffset['top']}px`;
+    this.$errorDiv.style.left = `${this.caretOffset['left']}px`;
+    this.$errorDiv.style.display = 'block';
+
+    let that = this;
+    that.removeDocumentEventListeners();
+    setTimeout(function(){
+      document.addEventListener('click', that.documentCallback);
+      if(that.document && that.document !== document){
+        that.document.addEventListener('click', that.documentCallback);
+      }
+    }, 100);
+  }
+
   private findResults(){
+    this.closeErrorAlert();
+
     let result       = this.boundElement.caretPositionWithDocumentInfo();
     this.caretOffset = this.boundElement.getCaretPosition();
 
@@ -474,7 +518,8 @@ export class DropkiqUI {
       if (error.name === "ParseError") {
         return false;
       } else if (error.name === "RenderError") {
-        return false;
+        this.renderErrorAlert(error);
+        return false;        
       } else {
         throw error;
       }
