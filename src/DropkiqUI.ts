@@ -67,6 +67,10 @@ export class DropkiqUI {
   private $ul: any;
   private $header: any;
   private $div: any;
+  private $errorDiv: any;
+  private $errorPoweredByDropkiq: any;
+  private $errorMessage: any;
+  private $errorHeader: any;
   private $poweredByDropkiq: any;
   private $paywall: any;
   private documentCallback: any;
@@ -134,7 +138,10 @@ export class DropkiqUI {
     this.$poweredByDropkiq.style['font-size'] = "10px";
     this.$poweredByDropkiq.style.background = "rgba(240,240,240,0.9)"
     this.$poweredByDropkiq.style['text-align'] = "right"
-    let poweredByText = document.createTextNode("Powered by");
+    let poweredByText = document.createElement("div");
+    poweredByText.style.display = "inline-block";
+    poweredByText.style["margin-top"] = "5px";
+    poweredByText.textContent = "Powered by";
     let $dropkiqImg = document.createElement("img");
     $dropkiqImg.setAttribute('src', "https://app.dropkiq.com/plugin/dropkiq-sm.png")
     $dropkiqImg.style.width = "48px";
@@ -160,10 +167,24 @@ export class DropkiqUI {
     this.$div.appendChild(this.$poweredByDropkiq);
     document.body.appendChild(this.$div);
 
+    this.$errorHeader = document.createElement("div");
+    this.$errorMessage = document.createElement("div");
+    this.$errorDiv = document.createElement("div");
+    this.$errorHeader.textContent = 'Liquid Render Error';
+    this.$errorPoweredByDropkiq = this.$poweredByDropkiq.cloneNode(true);
+    this.$errorDiv.setAttribute('id', 'dropkiq-error-alert');
+    this.$errorHeader.setAttribute('class', 'dropkiq-error-header');
+    this.$errorMessage.setAttribute('class', 'dropkiq-error-message');
+    this.$errorDiv.appendChild(this.$errorHeader);
+    this.$errorDiv.appendChild(this.$errorMessage);
+    this.$errorDiv.appendChild(this.$errorPoweredByDropkiq);
+    document.body.appendChild(this.$errorDiv);
+
     let that = this;
 
     that.documentCallback = function(){
       that.closeMenu();
+      that.closeErrorAlert();
     }
 
     let scrollCallback = function(){
@@ -288,6 +309,10 @@ export class DropkiqUI {
     return (this.suggestionsArray.length > 0);
   }
 
+  public closeErrorAlert(){
+    this.$errorDiv.style.display = 'none';
+  }
+ 
   public closeMenu(){
     this.removeDocumentEventListeners();
     this.suggestionsArray = [];
@@ -456,7 +481,31 @@ export class DropkiqUI {
     tippy('.hint-icon');
   }
 
+  private renderErrorAlert(error){
+    this.$errorMessage.textContent = error.message;
+
+    this.$errorPoweredByDropkiq.style.display = "none";
+    if(!this.dropkiqEngine.authorizer.authorized()){
+      this.$errorPoweredByDropkiq.style.display = "block";
+    }
+
+    this.$errorDiv.style.top = `${this.caretOffset['top']}px`;
+    this.$errorDiv.style.left = `${this.caretOffset['left']}px`;
+    this.$errorDiv.style.display = 'block';
+
+    let that = this;
+    that.removeDocumentEventListeners();
+    setTimeout(function(){
+      document.addEventListener('click', that.documentCallback);
+      if(that.document && that.document !== document){
+        that.document.addEventListener('click', that.documentCallback);
+      }
+    }, 100);
+  }
+
   private findResults(){
+    this.closeErrorAlert();
+
     let result       = this.boundElement.caretPositionWithDocumentInfo();
     this.caretOffset = this.boundElement.getCaretPosition();
 
@@ -474,7 +523,8 @@ export class DropkiqUI {
       if (error.name === "ParseError") {
         return false;
       } else if (error.name === "RenderError") {
-        return false;
+        this.renderErrorAlert(error);
+        return false;        
       } else {
         throw error;
       }
