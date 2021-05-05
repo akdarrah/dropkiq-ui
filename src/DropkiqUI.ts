@@ -138,7 +138,10 @@ export class DropkiqUI {
     this.$poweredByDropkiq.style['font-size'] = "10px";
     this.$poweredByDropkiq.style.background = "rgba(240,240,240,0.9)"
     this.$poweredByDropkiq.style['text-align'] = "right"
-    let poweredByText = document.createTextNode("Powered by");
+    let poweredByText = document.createElement("div");
+    poweredByText.style.display = "inline-block";
+    poweredByText.style["margin-top"] = "5px";
+    poweredByText.textContent = "Powered by";
     let $dropkiqImg = document.createElement("img");
     $dropkiqImg.setAttribute('src', "https://app.dropkiq.com/plugin/dropkiq-sm.png")
     $dropkiqImg.style.width = "48px";
