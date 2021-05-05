@@ -56,6 +56,7 @@ export declare class DropkiqUI {
     private $header;
     private $div;
     private $errorDiv;
+    private $errorPoweredByDropkiq;
     private $errorMessage;
     private $errorHeader;
     private $poweredByDropkiq;

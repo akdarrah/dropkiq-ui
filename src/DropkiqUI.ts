@@ -68,6 +68,7 @@ export class DropkiqUI {
   private $header: any;
   private $div: any;
   private $errorDiv: any;
+  private $errorPoweredByDropkiq: any;
   private $errorMessage: any;
   private $errorHeader: any;
   private $poweredByDropkiq: any;
@@ -167,12 +168,13 @@ export class DropkiqUI {
     this.$errorMessage = document.createElement("div");
     this.$errorDiv = document.createElement("div");
     this.$errorHeader.textContent = 'Liquid Render Error';
+    this.$errorPoweredByDropkiq = this.$poweredByDropkiq.cloneNode(true);
     this.$errorDiv.setAttribute('id', 'dropkiq-error-alert');
     this.$errorHeader.setAttribute('class', 'dropkiq-error-header');
     this.$errorMessage.setAttribute('class', 'dropkiq-error-message');
     this.$errorDiv.appendChild(this.$errorHeader);
     this.$errorDiv.appendChild(this.$errorMessage);
-    this.$errorDiv.appendChild(this.$poweredByDropkiq);
+    this.$errorDiv.appendChild(this.$errorPoweredByDropkiq);
     document.body.appendChild(this.$errorDiv);
 
     let that = this;
@@ -479,9 +481,9 @@ export class DropkiqUI {
   private renderErrorAlert(error){
     this.$errorMessage.textContent = error.message;
 
-    this.$poweredByDropkiq.style.display = "none";
+    this.$errorPoweredByDropkiq.style.display = "none";
     if(!this.dropkiqEngine.authorizer.authorized()){
-      this.$poweredByDropkiq.style.display = "block";
+      this.$errorPoweredByDropkiq.style.display = "block";
     }
 
     this.$errorDiv.style.top = `${this.caretOffset['top']}px`;
