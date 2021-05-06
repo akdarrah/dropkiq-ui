@@ -17,6 +17,7 @@
     "strictNullChecks": false
   },
   "exclude": [
+    "demo",
     "spec",
     "**/*.spec.ts",
     "node_modules",
