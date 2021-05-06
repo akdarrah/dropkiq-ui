@@ -55,6 +55,10 @@ export declare class DropkiqUI {
     private $ul;
     private $header;
     private $div;
+    private $errorDiv;
+    private $errorPoweredByDropkiq;
+    private $errorMessage;
+    private $errorHeader;
     private $poweredByDropkiq;
     private $paywall;
     private documentCallback;
@@ -62,9 +66,11 @@ export declare class DropkiqUI {
     updateScope(scope: object): void;
     registerFilter(name: string, filter: Function, template: string, selectionRange: Array<number>, hint?: string): void;
     menuIsOpen(): boolean;
+    closeErrorAlert(): void;
     closeMenu(): void;
     private removeDocumentEventListeners;
     private renderSuggestions;
+    private renderErrorAlert;
     private findResults;
     private insertSuggestion;
     private scrollToNext;
