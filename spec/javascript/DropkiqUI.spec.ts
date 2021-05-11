@@ -243,40 +243,6 @@ describe('DropkiqUI#findResults', () => {
     expect(dropkiqUI['result']).toStrictEqual({});
   })
 
-  it('renders the error div menu for Liquid Render Errors', () => {
-	  let element = document.getElementById('dropkiq-example');
-    let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
-    let dropkiqUI = new DropkiqUI(element, testSchema, context, {}, licenseKey);
-
-    let boundElement = dropkiqUI['boundElement'];
-
-    boundElement.caretPositionWithDocumentInfo = function(){
-      return {
-        leftText: "{{ .",
-        selectionStart: 4,
-        rightText: " }}",
-        allText: ("{{ . }}")
-      }
-    }
-
-    boundElement.getCaretPosition = function(){
-      return {
-        top: 1000,
-        left: 4000,
-      }
-    }
-
-    expect(dropkiqUI['result']).toStrictEqual({});
-    expect(dropkiqUI['$errorDiv'].style["display"]).toBe(""); // display none set in CSS
-
-    expect(function() {
-      dropkiqUI['findResults']()
-    }).not.toThrow();
-
-    expect(dropkiqUI['result']).toStrictEqual({});
-    expect(dropkiqUI['$errorDiv'].style["display"]).toBe("block");
-  })
-
   it('closes the menu if an exception happens in dropkiqEngine.update', () => {
 	  let element = document.getElementById('dropkiq-example');
 	  let licenseKey = "0a782a70-20fb-0138-f7b1-2cde48001122"
