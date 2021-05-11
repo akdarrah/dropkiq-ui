@@ -1,2 +1,0 @@
-export = __WEBPACK_EXTERNAL_MODULE__0__;
-export = __WEBPACK_EXTERNAL_MODULE__0__;
