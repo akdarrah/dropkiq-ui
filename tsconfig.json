@@ -18,6 +18,7 @@
   },
   "exclude": [
     "spec",
+    "demo",
     "**/*.spec.ts",
     "node_modules",
     "vendor",
