@@ -44,6 +44,7 @@ export class DropkiqUI {
   public element: any;
   public isCodeMirror: boolean;
   public isAceEditor: boolean;
+  public isCKEditor5: boolean;
   public boundElement: BoundElement;
   public schema: object;
   public context: object;
@@ -118,6 +119,8 @@ export class DropkiqUI {
 
     this.isCodeMirror = typeof(this.element['doc']) === 'object';
     this.isAceEditor  = typeof(this.element['renderer']) === 'object';
+    this.isCKEditor5  = typeof(this.element['ckeditorInstance']) === 'object';
+    console.log(this.isCKEditor5);
     this.boundElement = new BoundElement(this.element, this.window, this.document);
 
     this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey, {suggestionFilter: this.suggestionFilter});
