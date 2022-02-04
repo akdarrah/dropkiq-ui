@@ -26,6 +26,7 @@
     ]
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^32.0.0",
     "dompurify": "^2.2.3",
     "dropkiq": "^1.0.64",
     "tippy.js": "^5.1.4",
