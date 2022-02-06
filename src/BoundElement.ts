@@ -74,6 +74,19 @@ export class BoundElement {
         start: { row: rowAndColumn.row, column: columnStart },
         end: { row: rowAndColumn.row, column: columnEnd }
       }, false);
+    } else if (this.isCKEditor5){
+      this.element.model.change(writer => {
+        var parent;
+
+        if(textNode.parent){
+          parent = textNode.parent;
+        } else {
+          parent = this.element.model.document.getRoot();
+        }
+
+        var position = writer.createPosition( parent, [0, 0]);
+        writer.setSelection(position);
+      });
     } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
@@ -142,10 +155,16 @@ export class BoundElement {
       let coords = this.element.getCursorPosition();
       this.element.session.insert(coords, text);
     } else if (this.isCKEditor5){
+      var textNode;
+
       this.element.model.change(writer => {
+        textNode = writer.createText(text);
+
         this.element.model.insertContent(
-          writer.createText(text), this.element.model.document.selection, 'in');
+          textNode, this.element.model.document.selection, 'in');
       });
+
+      return textNode;
     } else if (this.isContenteditable){
       return this.insertTextForContenteditable(text)
     } else {
