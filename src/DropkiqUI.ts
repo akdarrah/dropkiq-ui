@@ -119,7 +119,7 @@ export class DropkiqUI {
 
     this.isCodeMirror = typeof(this.element['doc']) === 'object';
     this.isAceEditor  = typeof(this.element['renderer']) === 'object';
-    this.isCKEditor5  = typeof(this.element['ckeditorInstance']) === 'object';
+    this.isCKEditor5  = typeof(this.element['conversion']) === 'object';
     this.boundElement = new BoundElement(this.element, this.window, this.document);
 
     this.dropkiqEngine = new DropkiqEngine("", 0, schema, context, scope, this.licenseKey, {suggestionFilter: this.suggestionFilter});
@@ -268,6 +268,14 @@ export class DropkiqUI {
       this.element.on("blur", onBlurCallback);
       this.element.session.on("changeScrollTop", scrollCallback);
       this.element.session.on("changeScrollLeft", scrollCallback);
+    } else if(this.isCKEditor5){
+      var doc = this.element.ui.view.editable.element;
+
+      doc.addEventListener('keydown', keydownCallback);
+      doc.addEventListener("click", findResultsCallback);
+      doc.addEventListener("focus", findResultsCallback);
+      doc.addEventListener("blur", onBlurCallback);
+      doc.addEventListener("scroll", scrollCallback);
     } else {
       this.element.addEventListener('keydown', keydownCallback);
       this.element.addEventListener("click", findResultsCallback);

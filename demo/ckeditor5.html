@@ -126,8 +126,7 @@
       ClassicEditor
         .create(document.querySelector('#dropkiq-example'))
         .then((editor) => {
-          var element = editor.ui.view.editable.element;
-          var dropkiqUI = new DropkiqUI(element, schema, context, scope, "");
+          var dropkiqUI = new DropkiqUI(editor, schema, context, scope, "");
 
           // https://github.com/ckeditor/ckeditor5/issues/1244#issuecomment-420681107
           editor.editing.view.document.on( 'keydown', ( evt, data ) => {
@@ -137,7 +136,6 @@
               evt.stop();
             }
           }, { priority: 'highest' } );
-
         })
         .catch( error => {
           console.error( error );
