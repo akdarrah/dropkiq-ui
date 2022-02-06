@@ -75,18 +75,18 @@ export class BoundElement {
         end: { row: rowAndColumn.row, column: columnEnd }
       }, false);
     } else if (this.isCKEditor5){
-      this.element.model.change(writer => {
-        var parent;
+      // this.element.model.change(writer => {
+      //   var parent;
 
-        if(textNode.parent){
-          parent = textNode.parent;
-        } else {
-          parent = this.element.model.document.getRoot();
-        }
+      //   if(textNode.parent){
+      //     parent = textNode.parent;
+      //   } else {
+      //     parent = this.element.model.document.getRoot();
+      //   }
 
-        var position = writer.createPosition( parent, [0, 0]);
-        writer.setSelection(position);
-      });
+      //   var position = writer.createPosition( parent, [0, 0]);
+      //   writer.setSelection(position);
+      // });
     } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
@@ -133,10 +133,9 @@ export class BoundElement {
         left: cursorRect.left
       }
     } else if (this.isCKEditor5){
-      return {
-        top: 0,
-        left: 0
-      };
+      let selection = this.window.getSelection();
+      let range = selection.getRangeAt(0);
+      return this.getContentEditableCaretPosition(range.startOffset);
     } else if (this.isContenteditable){
       let selection = this.window.getSelection();
       let range = selection.getRangeAt(0);
