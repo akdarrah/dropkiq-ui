@@ -5,7 +5,6 @@ export class BoundElement {
   public isContenteditable: boolean;
   public isCodeMirror: boolean;
   public isAceEditor: boolean;
-  public isCKEditor5: boolean;
   public cachedOnBlurRange: any;
 
   constructor(element, window, document) {
@@ -15,7 +14,6 @@ export class BoundElement {
     this.isContenteditable = this.element.isContentEditable;
     this.isCodeMirror = typeof(this.element['doc']) === 'object';
     this.isAceEditor  = typeof(this.element['renderer']) === 'object';
-    this.isCKEditor5  = typeof(this.element['conversion']) === 'object';
     this.cachedOnBlurRange = null;
   }
 
@@ -24,10 +22,6 @@ export class BoundElement {
       this.element.focus();
     } else if (this.isAceEditor) {
       this.element.focus();
-    } else if (this.isCKEditor5) {
-      var doc = this.element.ui.view.editable.element;
-      let event = new Event('focus');
-      doc.dispatchEvent(event);
     } else {
       let event = new Event('focus');
       this.element.dispatchEvent(event);
@@ -39,8 +33,6 @@ export class BoundElement {
       return this.caretPositionWithDocumentInfoForCodeMirror();
     } else if (this.isAceEditor){
       return this.caretPositionWithDocumentInfoForAceEditor();
-    } else if (this.isCKEditor5){  
-      return this.caretPositionWithDocumentInfoForCKEditor5();
     } else if (this.isContenteditable){
       return this.caretPositionWithDocumentInfoForContenteditable();
     } else {
@@ -74,19 +66,6 @@ export class BoundElement {
         start: { row: rowAndColumn.row, column: columnStart },
         end: { row: rowAndColumn.row, column: columnEnd }
       }, false);
-    } else if (this.isCKEditor5){
-      // this.element.model.change(writer => {
-      //   var parent;
-
-      //   if(textNode.parent){
-      //     parent = textNode.parent;
-      //   } else {
-      //     parent = this.element.model.document.getRoot();
-      //   }
-
-      //   var position = writer.createPosition( parent, [0, 0]);
-      //   writer.setSelection(position);
-      // });
     } else if (this.isContenteditable){
       var range = this.document.createRange();
       var sel = this.window.getSelection();
@@ -132,10 +111,6 @@ export class BoundElement {
         top: cursorRect.top + cursorRect.height,
         left: cursorRect.left
       }
-    } else if (this.isCKEditor5){
-      let selection = this.window.getSelection();
-      let range = selection.getRangeAt(0);
-      return this.getContentEditableCaretPosition(range.startOffset);
     } else if (this.isContenteditable){
       let selection = this.window.getSelection();
       let range = selection.getRangeAt(0);
@@ -153,17 +128,6 @@ export class BoundElement {
     } else if (this.isAceEditor){
       let coords = this.element.getCursorPosition();
       this.element.session.insert(coords, text);
-    } else if (this.isCKEditor5){
-      var textNode;
-
-      this.element.model.change(writer => {
-        textNode = writer.createText(text);
-
-        this.element.model.insertContent(
-          textNode, this.element.model.document.selection, 'in');
-      });
-
-      return textNode;
     } else if (this.isContenteditable){
       return this.insertTextForContenteditable(text)
     } else {
@@ -278,34 +242,6 @@ export class BoundElement {
     let column         = cursor.ch;
 
     return this.caretPositionWithDocumentInfoForValueRowAndColumn(value, row, column);
-  }
-
-  // Same as caretPositionWithDocumentInfoForContenteditable,
-  // but must use docuent instead of editor instance
-  public caretPositionWithDocumentInfoForCKEditor5(): object {
-    var doc = this.element.ui.view.editable.element;
-
-    let selection = this.window.getSelection();
-    let range = selection.getRangeAt(0);
-
-    // Left
-    let leftRange = range.cloneRange();
-    leftRange.setStart(doc, 0);
-    leftRange.setEnd(range.startContainer, range.startOffset);
-    let leftText = this.captureRangeText(leftRange);
-
-    // Right
-    let rightRange = range.cloneRange();
-    rightRange.selectNodeContents(doc);
-    rightRange.setStart(range.startContainer, range.startOffset);
-    let rightText = this.captureRangeText(rightRange);
-
-    return {
-      leftText: leftText,
-      selectionStart: leftText.length,
-      rightText: rightText,
-      allText: (leftText + rightText)
-    }
   }
 
   private caretPositionWithDocumentInfoForValueRowAndColumn(value, row, column): object {

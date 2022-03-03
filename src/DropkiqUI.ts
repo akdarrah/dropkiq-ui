@@ -37,7 +37,8 @@ interface DropkiqOptions {
   onRender?: (renderedDocument: string) => void
   showHints?: () => boolean
   showPreviews?: () => boolean
-  suggestionFilter?: (suggestions: Suggestion[]) => void
+  suggestionFilter?: (suggestions: Suggestion[]) => void,
+  autocompleteCurlyBraces?: () => boolean
 }
 
 export class DropkiqUI {
@@ -55,6 +56,7 @@ export class DropkiqUI {
   public showPreviews: Function;
   public showHints: Function;
   public suggestionFilter: Function;
+  public autocompleteCurlyBraces: Function;
   public onRender: Function;
   public iframe: any;
   public document: any;
@@ -81,6 +83,7 @@ export class DropkiqUI {
     this.options          = options;
     this.showPreviews     = (typeof(options['showPreviews']) === 'function' ? options['showPreviews'] : () => true);
     this.showHints        = (typeof(options['showHints']) === 'function' ? options['showHints'] : () => true);
+    this.autocompleteCurlyBraces = (typeof(options['autocompleteCurlyBraces']) === 'function' ? options['autocompleteCurlyBraces'] : () => true);
     this.suggestionFilter = (typeof(options['suggestionFilter']) === 'function' ? options['suggestionFilter'] : () => {});
     this.onRender         = (typeof(options['onRender']) === 'function' ? options['onRender'] : () => {});
     this.iframe           = options['iframe'];
@@ -214,25 +217,27 @@ export class DropkiqUI {
       }
 
       // Auto-complete {{}} and {%%}
-      setTimeout(function(){
-        let result = that.boundElement.caretPositionWithDocumentInfo();
-
-        let selectionStart    = result['selectionStart'];
-        let leftText          = result['leftText'];
-        let rightText         = result['rightText'];
-        let leftTwoCharacters = leftText.slice(-2);
-        let closeTagPattern   = /^(\s+)?\}(.+)?/;
-
-        if (e.keyCode == 219 && e.shiftKey && (leftTwoCharacters[1] == "{" || leftTwoCharacters == "{")){
-          let textNode = that.boundElement.insertTextAtCaret("}");
-          that.boundElement.setCaretPosition(selectionStart, 0, 0, textNode, "");
-          that.element.focus();
-        } else if (e.keyCode == 53 && e.shiftKey && leftTwoCharacters == "{%" && closeTagPattern.test(rightText)){
-          let textNode = that.boundElement.insertTextAtCaret("%");
-          that.boundElement.setCaretPosition(selectionStart, 0, 0, textNode, "");
-          that.element.focus();
-        }
-      }, 25);
+      if(that.autocompleteCurlyBraces()){
+        setTimeout(function(){
+          let result = that.boundElement.caretPositionWithDocumentInfo();
+  
+          let selectionStart    = result['selectionStart'];
+          let leftText          = result['leftText'];
+          let rightText         = result['rightText'];
+          let leftTwoCharacters = leftText.slice(-2);
+          let closeTagPattern   = /^(\s+)?\}(.+)?/;
+  
+          if (e.keyCode == 219 && e.shiftKey && (leftTwoCharacters[1] == "{" || leftTwoCharacters == "{")){
+            let textNode = that.boundElement.insertTextAtCaret("}");
+            that.boundElement.setCaretPosition(selectionStart, 0, 0, textNode, "");
+            that.element.focus();
+          } else if (e.keyCode == 53 && e.shiftKey && leftTwoCharacters == "{%" && closeTagPattern.test(rightText)){
+            let textNode = that.boundElement.insertTextAtCaret("%");
+            that.boundElement.setCaretPosition(selectionStart, 0, 0, textNode, "");
+            that.element.focus();
+          }
+        }, 25);
+      }
 
       findResultsCallback(e);
     };
@@ -268,15 +273,7 @@ export class DropkiqUI {
       this.element.on("blur", onBlurCallback);
       this.element.session.on("changeScrollTop", scrollCallback);
       this.element.session.on("changeScrollLeft", scrollCallback);
-    } else if(this.isCKEditor5){
-      var doc = this.element.ui.view.editable.element;
-
-      doc.addEventListener('keydown', keydownCallback);
-      doc.addEventListener("click", findResultsCallback);
-      doc.addEventListener("focus", findResultsCallback);
-      doc.addEventListener("blur", onBlurCallback);
-      doc.addEventListener("scroll", scrollCallback);
-    } else {
+    }  else {
       this.element.addEventListener('keydown', keydownCallback);
       this.element.addEventListener("click", findResultsCallback);
       this.element.addEventListener("focus", findResultsCallback);

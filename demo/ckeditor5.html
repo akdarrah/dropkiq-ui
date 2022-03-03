@@ -126,7 +126,12 @@
       ClassicEditor
         .create(document.querySelector('#dropkiq-example'))
         .then((editor) => {
-          var dropkiqUI = new DropkiqUI(editor, schema, context, scope, "");
+          var element = editor.ui.view.editable.element;
+          var dropkiqUI = new DropkiqUI(element, schema, context, scope, "", {
+            autocompleteCurlyBraces: function(){
+              return false;
+            }
+          });
 
           // https://github.com/ckeditor/ckeditor5/issues/1244#issuecomment-420681107
           editor.editing.view.document.on( 'keydown', ( evt, data ) => {

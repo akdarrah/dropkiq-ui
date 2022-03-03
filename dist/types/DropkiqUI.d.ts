@@ -29,6 +29,7 @@ interface DropkiqOptions {
     showHints?: () => boolean;
     showPreviews?: () => boolean;
     suggestionFilter?: (suggestions: Suggestion[]) => void;
+    autocompleteCurlyBraces?: () => boolean;
 }
 export declare class DropkiqUI {
     element: any;
@@ -44,6 +45,7 @@ export declare class DropkiqUI {
     showPreviews: Function;
     showHints: Function;
     suggestionFilter: Function;
+    autocompleteCurlyBraces: Function;
     onRender: Function;
     iframe: any;
     document: any;

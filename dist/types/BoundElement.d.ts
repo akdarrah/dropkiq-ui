@@ -5,7 +5,6 @@ export declare class BoundElement {
     isContenteditable: boolean;
     isCodeMirror: boolean;
     isAceEditor: boolean;
-    isCKEditor5: boolean;
     cachedOnBlurRange: any;
     constructor(element: any, window: any, document: any);
     setFocus(): void;
@@ -24,7 +23,6 @@ export declare class BoundElement {
     caretPositionWithDocumentInfoForContenteditable(): object;
     caretPositionWithDocumentInfoForAceEditor(): object;
     caretPositionWithDocumentInfoForCodeMirror(): object;
-    caretPositionWithDocumentInfoForCKEditor5(): object;
     private caretPositionWithDocumentInfoForValueRowAndColumn;
     private captureRangeText;
     private getTextAreaOrInputUnderlinePosition;
