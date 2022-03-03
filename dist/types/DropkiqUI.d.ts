@@ -35,7 +35,6 @@ export declare class DropkiqUI {
     element: any;
     isCodeMirror: boolean;
     isAceEditor: boolean;
-    isCKEditor5: boolean;
     boundElement: BoundElement;
     schema: object;
     context: object;
