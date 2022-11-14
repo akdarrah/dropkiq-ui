@@ -2207,10 +2207,10 @@ dompurify@^2.2.3:
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.2.3.tgz#ec653ba521b39f397c2ca045769438d593ea8a9f"
   integrity sha512-8Hv7Q0FuwD9rWoB6qI2eZsfKbGXfoUVuGHHrE15vgk4ReOKwOkSgbqb2OMFtc0d5besOEkoLkcyuV10zQ2X5gw==
 
-dropkiq@^1.0.65:
-  version "1.0.65"
-  resolved "https://registry.yarnpkg.com/dropkiq/-/dropkiq-1.0.65.tgz#badba484506bb07bf46e6dace8abf62da5f668b5"
-  integrity sha512-ZWa1VHzH9L+D+LEvCq22sutBoyhlvPRP8RNF3YgN6LB6J3s1gwTECF4SCZ6lJkq9VmMNXxr2Imh9U+J6B2Bf2A==
+dropkiq@^1.0.66:
+  version "1.0.66"
+  resolved "https://registry.yarnpkg.com/dropkiq/-/dropkiq-1.0.66.tgz#e73484afb3b5208277e9ac8bb2d98cdde5ae5a3b"
+  integrity sha512-IvSnp4OYsfR+YH6DUej/wRBXyBcWF6oqBxKh2ocLIWpJWZ1l105+HqIE+VVGQ1dLcx4YB50Wob+liJI9joBIbg==
   dependencies:
     axios "^0.18.1"
     js-yaml "^3.0.0"
