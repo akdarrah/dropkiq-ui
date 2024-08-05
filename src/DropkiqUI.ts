@@ -236,7 +236,7 @@ export class DropkiqUI {
     };
 
     let findResultsCallback = function(e){
-      if(typeof(e.stopImmediatePropagation) === 'function'){
+      if(e && typeof(e.stopImmediatePropagation) === 'function'){
         e.stopImmediatePropagation();
       }
 
